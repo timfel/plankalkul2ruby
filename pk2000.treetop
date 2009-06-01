@@ -1,0 +1,66 @@
+grammar Pk2000
+
+   rule term3
+      condition / operation
+   end
+
+   rule term2
+      ("-" / "!") term 
+   end
+
+   rule condition
+      (term2 / term) ("=" / "<" / ">") (condition / operation)
+   end
+
+   rule operation
+      (term2 / term) ("+" / "-" / "*" / "/" / "&" / "|" / "~") operation / term2 / term 
+   end
+
+   rule term
+      variable / constant
+   end
+
+   rule constant
+      number / logConstant
+   end
+
+   rule logConstant
+      "+"+ / "-"+ 
+   end
+
+   rule variable
+      ("V" / "Z" / "R") [0-9]+ "[" component? ":" type "]"
+   end
+
+   rule dot
+      "."
+   end
+
+   rule comma
+      ","
+   end
+
+   rule simpleType
+      "0"
+   end
+
+   rule type
+      number dot type / tupleType / simpleType
+   end
+
+   rule tupleType
+      "(" type (comma type)+ ")"
+   end
+
+   rule component
+      number dot component / variable / genericVariable / number
+   end
+
+   rule genericVariable
+      "i" number / "i"
+   end
+
+   rule number
+      [1-9] [0-9]* 
+   end
+end

@@ -1,0 +1,121 @@
+grammar Pk
+   rule logConstant
+      '+' / '-' / '+' logConstant / '-' logCconstant
+   end
+
+   rule constant
+      number / logConstant
+   end
+
+   rule program
+      "P" number " " randauszug "\n" statement* "END"
+   end
+
+   rule randauszug
+      vTuple ' => ' rTuple
+   end
+
+   rule vTuple
+      "(V0[:" type "])" / "(V0[:" type "],V1[:" type "])" / "(V0[:" type "],V1[:" type "],V2[:" type "])"
+   end
+
+   rule rTuple
+      "(R0[:" type "])" / "(R0[:" type "],R1[:" type "])" / "(R0[:" type "],R1[:" type "],R2[:" type "])"
+   end
+
+   rule statement
+      assignment / ifThen / whilePk / block / builtIns
+   end
+
+   rule block
+      "[" statement+ "]"
+   end
+
+   rule builtIns
+      "FIN" / "FIN" number
+   end
+
+   rule assignment
+      term2 "=>" variable / tuple "=>" (variable / varTuple)
+   end
+
+   rule varTuple
+      "(" variable (comma variable)+ ")"
+   end
+
+   rule tuple
+      "(" term2 (comma term2)+ ")"
+   end
+
+   rule ifThen
+      term2 "->" statement
+   end
+
+   rule whilePk
+      ("w" / "W" / "w1" / "W1") ("[" number "]")? ("(" arithArg ")")? block
+   end
+
+   rule simpleType
+      "0"
+   end
+
+   rule tupleType
+      "(" type (comma type)+ ")"
+   end
+
+   rule type
+      simpleType / tupleType / number dot type
+   end
+
+   rule varType
+      [a-zA-Z] dot type
+   end
+
+   rule allType
+      type / varType
+   end
+
+   rule variable
+      ("V" / "Z" / "R") number "[" (component)? ":" type "]" 
+   end
+
+   rule genericVariable
+      "i" / "i" number / [a-zA-Z]
+   end
+
+   rule component
+      number / variable / genericVariable / term2 / component dot component
+   end
+
+   rule call
+      "R" number "[" (component)? ":" type "]" "(" term2 (comma term2)* ")"
+   end
+
+   rule term
+      constant / variable / genericVariable / call / "(" operation ")" / "(" condition ")" / "(" term2 ")"
+   end
+
+   rule term2
+      term / "-" term / "!" term / operation / condition
+   end
+
+   rule operation
+      term2 ( "+" / "-" / "*" / "/" / "&" / "|" / "~" / "~\\" ) term
+   end
+
+   rule condition
+      term2 ( "=" / ">" / "<" ) term2 / tuple "=" tuple
+   end
+
+   rule number
+      [1-9] [0-9]*
+   end
+
+   rule dot
+      "."
+   end
+
+   rule comma
+      ","
+   end
+end
