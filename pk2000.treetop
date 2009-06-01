@@ -1,23 +1,79 @@
 grammar Pk2000
 
-   rule term3
-      condition / operation
+   rule program 
+      "P" number " " randauszug "\n" lines "\nEND" / lines
+   end
+
+   rule randauszug
+      vTuple "=>" rTuple
+   end
+
+   rule vTuple
+      "(V0[:" type "])" / "(V0[:" type "],V1[:" type "])" / "(V0[:" type "],V1[:" type "],V2[:" type "])"
+   end
+
+   rule rTuple
+      "(R0[:" type "])" / "(R0[:" type "],R1[:" type "])" / "(R0[:" type "],R1[:" type "],R2[:" type "])"
+   end
+
+   rule lines
+      statement ("\n" statement)*
+   end
+
+   rule statement
+      (assignment / ifThen / while / block / builtIns / term2) 
+   end
+   
+   rule assignment
+      term2 "=>" variable / tuple "=>" variable / tuple "=>" varTuple
+   end
+
+   rule ifThen
+      term2 "->" statement
+   end
+
+   rule while
+      "w" "1"? ("[" number "]")? ("(" operation ")")? block
+   end
+
+   rule block
+      "[" lines "]"
+   end
+
+   rule builtIns
+      "FIN" number?
    end
 
    rule term2
-      ("-" / "!") term 
+      call / condition 
    end
 
-   rule condition
-      (term2 / term) ("=" / "<" / ">") (condition / operation)
+   rule call
+      "R" [0-9]+ "[" component? ":" type "] (" term2 (comma term2)* ")"
    end
 
-   rule operation
-      (term2 / term) ("+" / "-" / "*" / "/" / "&" / "|" / "~") operation / term2 / term 
+   rule prefix
+      "-" / "!" 
    end
 
    rule term
-      variable / constant
+      variable / constant 
+   end 
+
+   rule tuple
+      "(" term2 (comma term2)+ ")"
+   end
+
+   rule varTuple
+      "(" variable (comma variable)+ ")"
+   end
+
+   rule condition
+      prefix? term ("=" / "<" / ">") condition / tuple "=" tuple  / operation
+   end
+
+   rule operation
+      prefix? term ("+" / "-" / "*" / "/" / "&" / "|" / "~") condition / prefix? term
    end
 
    rule constant
@@ -25,7 +81,7 @@ grammar Pk2000
    end
 
    rule logConstant
-      "+"+ / "-"+ 
+      "+" logConstant* / "-" logConstant*
    end
 
    rule variable
@@ -53,7 +109,7 @@ grammar Pk2000
    end
 
    rule component
-      number dot component / variable / genericVariable / number
+      number dot component / term2 / variable / genericVariable / number 
    end
 
    rule genericVariable
