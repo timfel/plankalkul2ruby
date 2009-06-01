@@ -1,7 +1,14 @@
 grammar Pk2000
 
    rule program 
-      "P" number " " randauszug "\n" lines "\nEND" / lines
+      "P" number " " randauszug "\n" lines "\nEND" {
+         def toRuby
+            s = "define_method('PK"+number.text_value+"') { |"+randauszug.vTuple.toRuby+"|"
+            s << "\n" << lines.toRuby
+            s << "\nreturn "+randauszug.rTuple.toRuby << "}"
+         end
+      }
+      / lines
    end
 
    rule randauszug
@@ -9,39 +16,108 @@ grammar Pk2000
    end
 
    rule vTuple
-      "(V0[:" type "])" / "(V0[:" type "],V1[:" type "])" / "(V0[:" type "],V1[:" type "],V2[:" type "])"
+      ("(V0[:" type "])" / "(V0[:" type "],V1[:" type "])" / "(V0[:" type "],V1[:" type "],V2[:" type "])") {
+         def toRuby
+	    s = ""
+	    text_value.split(",").each do |input| 
+	       input =~ /\[:(.*)\]/
+               s << input.gsub(/\[:(.*)\]/,"_typ:"+$1)
+	       s << "," unless input == text_value.split(",").last
+	    end
+            s
+         end
+      }
    end
 
    rule rTuple
-      "(R0[:" type "])" / "(R0[:" type "],R1[:" type "])" / "(R0[:" type "],R1[:" type "],R2[:" type "])"
+      ("(R0[:" type "])" / "(R0[:" type "],R1[:" type "])" / "(R0[:" type "],R1[:" type "],R2[:" type "])") {
+         def toRuby
+	    s = ""
+	    text_value.split(",").each do |input| 
+	       input =~ /\[:(.*)\]/
+               s << input.gsub(/\[:(.*)\]/,"_typ:"+$1) 
+	       s << "," unless input == text_value.split(",").last
+	    end
+            s
+         end
+      }
    end
 
    rule lines
-      statement ("\n" statement)*
+      first:statement rest:("\n" lines)? {
+         def toRuby
+            s = first.toRuby+"\n"
+	    s << rest.lines.toRuby unless rest.empty?
+	    s
+         end
+      }
    end
 
    rule statement
-      (assignment / ifThen / while / block / builtIns / term2) 
+      (assignment / ifThen / while / block / builtIns / term2)
    end
    
    rule assignment
-      term2 "=>" variable / tuple "=>" variable / tuple "=>" varTuple
+      (from:term2 "=>" to:variable / from:tuple "=>" to:variable / from:tuple "=>" to:varTuple) {
+         def toRuby
+            to.toRuby+" = "+from.toRuby
+         end
+      }
    end
 
    rule ifThen
-      term2 "->" statement
+      term2 "->" statement {
+         def toRuby
+            "if "+term2.toRuby+"\n"+statement.toRuby+"\nend"
+         end
+      }
    end
 
    rule while
-      "w" "1"? ("[" number "]")? ("(" operation ")")? block
+      "w" count:"1"? ("[" level:number "]")? fixed:("(" forTo:operation ")")? block {
+	 def forToGet
+	    return fixed.forTo if fixed.respond_to? :forTo
+	    return nil
+	 end
+	 def toRubyFor
+	    s = "(0..("+forToGet.toRuby+")).times" 
+	    if count
+	       s << "_with_index do |x,i|\n ("
+	    else
+	       s << " do |x|\n"
+	    end 
+	 end
+	 def toRubyWhile
+	    s = "i = 0\nflag=true\n" if count.text_value == "1"
+	    s = "flag=true\n" if s.nil?
+	    s << " while(flag) do flag = (\n"
+	 end
+         def toRuby
+	    if forToGet
+	       s = toRubyFor
+	    else
+	       s = toRubyWhile
+	    end
+	    s << "Proc.new "+block.toRuby+".call"
+	    s << "\n) \nend"
+         end
+      }
    end
 
    rule block
-      "[" lines "]"
+      "[" lines "]" {
+         def toRuby
+            "{"+lines.toRuby+"}"
+         end
+      }
    end
 
    rule builtIns
-      "FIN" number?
+      "FIN" number? {
+         def toRuby
+            "break"
+         end
+      }
    end
 
    rule term2
@@ -69,11 +145,32 @@ grammar Pk2000
    end
 
    rule condition
-      prefix? term ("=" / "<" / ">") condition / tuple "=" tuple  / operation
+      prefix? term op:("=" / "<" / ">") condition {
+	 def toRuby
+	    s = " ("
+	    s << prefix.text_value if respond_to? :prefix
+	    s << term.toRuby << " " << op.text_value << "= " << condition.toRuby << ") "
+	 end
+      }
+      / tuple "=" tuple
+      / operation
    end
 
    rule operation
-      prefix? term ("+" / "-" / "*" / "/" / "&" / "|" / "~") condition / prefix? term
+      prefix? term op:("+" / "-" / "*" / "/" / "&" / "|" / "~") condition {
+         def toRuby
+	    s = ""
+	    s = prefix.text_value if respond_to?(:prefix) 
+	    s << term.toRuby+op.text_value+condition.toRuby
+         end
+      }
+      / prefix? term {
+	 def toRuby
+            s = "" 
+	    s << prefix.text_value if respond_to?(:prefix)
+	    s << term.toRuby
+	 end
+      }
    end
 
    rule constant
@@ -85,7 +182,14 @@ grammar Pk2000
    end
 
    rule variable
-      ("V" / "Z" / "R") [0-9]+ "[" component? ":" type "]"
+      ("V" / "Z" / "R") [0-9]+ "[" component? ":" type "]" {
+         def toRuby
+            components = text_value.split(/:|\[|\]/)
+            s = components[0]
+            s << ("["+components[1]+"]") unless (components[1] == "")
+            s << "_typ:" << components[2]
+         end
+      }
    end
 
    rule dot
@@ -117,6 +221,10 @@ grammar Pk2000
    end
 
    rule number
-      [1-9] [0-9]* 
+      [1-9] [0-9]* { 
+	 def toRuby
+	    text_value
+	 end
+      }
    end
 end

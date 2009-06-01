@@ -26,8 +26,3 @@ end
 s.each do |item|
    pp item unless p.parse(item)
 end
-
-pp p.parse("P815 (V0[:0])=>(R0[:0])
-4=>Z0[:2.2.0]
-V0[:8.0]+1=>R0[:8.0]
-END")
