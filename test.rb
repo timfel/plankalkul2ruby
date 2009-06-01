@@ -1,4 +1,5 @@
 require 'treetop'
+require 'pk2000core'
 require 'pp'
 
 p = (Treetop.load 'pk2000').new

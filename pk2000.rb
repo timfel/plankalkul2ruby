@@ -20,14 +20,6 @@ module Pk2000
 
   end
 
-  module Program1
-    def toRuby
-       s = "define_method('PK"+number.text_value+"') { |"+randauszug.vTuple.toRuby+"|"
-       s << "\n" << lines.toRuby
-       s << "\nreturn "+randauszug.rTuple.toRuby << "}"
-    end
-  end
-
   def _nt_program
     start_index = index
     if node_cache[:program].has_key?(index)
@@ -89,9 +81,8 @@ module Pk2000
       end
     end
     if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1 = instantiate_node(PKMethodNode,input, i1...index, s1)
       r1.extend(Program0)
-      r1.extend(Program1)
     else
       self.index = i1
       r1 = nil
@@ -195,15 +186,10 @@ module Pk2000
   end
 
   module VTuple3
-    def toRuby
-	    s = ""
-	    text_value.split(",").each do |input| 
-	       input =~ /\[:(.*)\]/
-          s << input.gsub(/\[:(.*)\]/,"_typ:"+$1)
-	       s << "," unless input == text_value.split(",").last
-	    end
-       s
-    end
+	 def toRuby
+	    # only need comma-delimited list of var-names
+	    text_value.gsub(/\(|\)|\[[^V]*\]/, "").lowercase
+	 end
   end
 
   def _nt_vTuple
@@ -403,18 +389,6 @@ module Pk2000
 
   end
 
-  module RTuple3
-    def toRuby
-	    s = ""
-	    text_value.split(",").each do |input| 
-	       input =~ /\[:(.*)\]/
-          s << input.gsub(/\[:(.*)\]/,"_typ:"+$1) 
-	       s << "," unless input == text_value.split(",").last
-	    end
-       s
-    end
-  end
-
   def _nt_rTuple
     start_index = index
     if node_cache[:rTuple].has_key?(index)
@@ -448,7 +422,7 @@ module Pk2000
       end
     end
     if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1 = instantiate_node(PKVariableNode,input, i1...index, s1)
       r1.extend(RTuple0)
     else
       self.index = i1
@@ -456,7 +430,6 @@ module Pk2000
     end
     if r1
       r0 = r1
-      r0.extend(RTuple3)
     else
       i5, s5 = index, []
       if input.index("(R0[:", index) == index
@@ -496,7 +469,7 @@ module Pk2000
         end
       end
       if s5.last
-        r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+        r5 = instantiate_node(PKVariableNode,input, i5...index, s5)
         r5.extend(RTuple1)
       else
         self.index = i5
@@ -504,7 +477,6 @@ module Pk2000
       end
       if r5
         r0 = r5
-        r0.extend(RTuple3)
       else
         i11, s11 = index, []
         if input.index("(R0[:", index) == index
@@ -558,7 +530,7 @@ module Pk2000
           end
         end
         if s11.last
-          r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
+          r11 = instantiate_node(PKVariableNode,input, i11...index, s11)
           r11.extend(RTuple2)
         else
           self.index = i11
@@ -566,7 +538,6 @@ module Pk2000
         end
         if r11
           r0 = r11
-          r0.extend(RTuple3)
         else
           self.index = i0
           r0 = nil
@@ -580,7 +551,7 @@ module Pk2000
   end
 
   module Lines0
-    def lines
+    def next
       elements[1]
     end
   end
@@ -592,14 +563,6 @@ module Pk2000
 
     def rest
       elements[1]
-    end
-  end
-
-  module Lines2
-    def toRuby
-       s = first.toRuby+"\n"
-	    s << rest.lines.toRuby unless rest.empty?
-	    s
     end
   end
 
@@ -643,9 +606,8 @@ module Pk2000
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
       r0.extend(Lines1)
-      r0.extend(Lines2)
     else
       self.index = i0
       r0 = nil
@@ -735,7 +697,7 @@ module Pk2000
 
   module Assignment3
     def toRuby
-       to.toRuby+" = "+from.toRuby
+       to.toRuby+" <= "+from.toRuby
     end
   end
 
@@ -926,35 +888,6 @@ module Pk2000
     end
   end
 
-  module While3
-	 def forToGet
-	    return fixed.forTo if fixed.respond_to? :forTo
-	    return nil
-	 end
-	 def toRubyFor
-	    s = "(0..("+forToGet.toRuby+")).times" 
-	    if count
-	       s << "_with_index do |x,i|\n ("
-	    else
-	       s << " do |x|\n"
-	    end 
-	 end
-	 def toRubyWhile
-	    s = "i = 0\nflag=true\n" if count.text_value == "1"
-	    s = "flag=true\n" if s.nil?
-	    s << " while(flag) do flag = (\n"
-	 end
-    def toRuby
-	    if forToGet
-	       s = toRubyFor
-	    else
-	       s = toRubyWhile
-	    end
-	    s << "Proc.new "+block.toRuby+".call"
-	    s << "\n) \nend"
-    end
-  end
-
   def _nt_while
     start_index = index
     if node_cache[:while].has_key?(index)
@@ -1068,9 +1001,8 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKWhileNode,input, i0...index, s0)
       r0.extend(While2)
-      r0.extend(While3)
     else
       self.index = i0
       r0 = nil
@@ -1142,12 +1074,6 @@ module Pk2000
   module BuiltIns0
   end
 
-  module BuiltIns1
-    def toRuby
-       "break"
-    end
-  end
-
   def _nt_builtIns
     start_index = index
     if node_cache[:builtIns].has_key?(index)
@@ -1175,9 +1101,8 @@ module Pk2000
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKFinNode,input, i0...index, s0)
       r0.extend(BuiltIns0)
-      r0.extend(BuiltIns1)
     else
       self.index = i0
       r0 = nil
@@ -1360,7 +1285,7 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKCallNode,input, i0...index, s0)
       r0.extend(Call1)
     else
       self.index = i0
@@ -1443,14 +1368,18 @@ module Pk2000
       elements[0]
     end
 
-    def term2
+    def next
       elements[1]
     end
   end
 
   module Tuple1
-    def term2
+    def first
       elements[1]
+    end
+
+    def rest
+      elements[2]
     end
 
   end
@@ -1518,7 +1447,7 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
       r0.extend(Tuple1)
     else
       self.index = i0
@@ -1535,14 +1464,18 @@ module Pk2000
       elements[0]
     end
 
-    def variable
+    def next
       elements[1]
     end
   end
 
   module VarTuple1
-    def variable
+    def first
       elements[1]
+    end
+
+    def rest
+      elements[2]
     end
 
   end
@@ -1610,7 +1543,7 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
       r0.extend(VarTuple1)
     else
       self.index = i0
@@ -1637,14 +1570,6 @@ module Pk2000
   end
 
   module Condition1
-	 def toRuby
-	    s = " ("
-	    s << prefix.text_value if respond_to? :prefix
-	    s << term.toRuby << " " << op.text_value << "= " << condition.toRuby << ") "
-	 end
-  end
-
-  module Condition2
     def tuple
       elements[0]
     end
@@ -1719,9 +1644,8 @@ module Pk2000
       end
     end
     if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1 = instantiate_node(PKOperationNode,input, i1...index, s1)
       r1.extend(Condition0)
-      r1.extend(Condition1)
     else
       self.index = i1
       r1 = nil
@@ -1748,7 +1672,7 @@ module Pk2000
       end
       if s10.last
         r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
-        r10.extend(Condition2)
+        r10.extend(Condition1)
       else
         self.index = i10
         r10 = nil
@@ -1786,20 +1710,12 @@ module Pk2000
   end
 
   module Operation1
-    def toRuby
-	    s = ""
-	    s = prefix.text_value if respond_to?(:prefix) 
-	    s << term.toRuby+op.text_value+condition.toRuby
-    end
-  end
-
-  module Operation2
     def term
       elements[1]
     end
   end
 
-  module Operation3
+  module Operation2
 	 def toRuby
     s = "" 
 	    s << prefix.text_value if respond_to?(:prefix)
@@ -1916,9 +1832,8 @@ module Pk2000
       end
     end
     if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1 = instantiate_node(PKOperationNode,input, i1...index, s1)
       r1.extend(Operation0)
-      r1.extend(Operation1)
     else
       self.index = i1
       r1 = nil
@@ -1940,8 +1855,8 @@ module Pk2000
       end
       if s14.last
         r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
+        r14.extend(Operation1)
         r14.extend(Operation2)
-        r14.extend(Operation3)
       else
         self.index = i14
         r14 = nil
@@ -2082,15 +1997,6 @@ module Pk2000
 
   end
 
-  module Variable1
-    def toRuby
-       components = text_value.split(/:|\[|\]/)
-       s = components[0]
-       s << ("["+components[1]+"]") unless (components[1] == "")
-       s << "_typ:" << components[2]
-    end
-  end
-
   def _nt_variable
     start_index = index
     if node_cache[:variable].has_key?(index)
@@ -2204,9 +2110,8 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKVariableNode,input, i0...index, s0)
       r0.extend(Variable0)
-      r0.extend(Variable1)
     else
       self.index = i0
       r0 = nil
@@ -2348,14 +2253,18 @@ module Pk2000
       elements[0]
     end
 
-    def type
+    def next
       elements[1]
     end
   end
 
   module TupleType1
-    def type
+    def first
       elements[1]
+    end
+
+    def rest
+      elements[2]
     end
 
   end
@@ -2423,7 +2332,7 @@ module Pk2000
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
       r0.extend(TupleType1)
     else
       self.index = i0
@@ -2569,13 +2478,6 @@ module Pk2000
   module Number0
   end
 
-  module Number1
- 
-	 def toRuby
-	    text_value
-	 end
-  end
-
   def _nt_number
     start_index = index
     if node_cache[:number].has_key?(index)
@@ -2613,7 +2515,6 @@ module Pk2000
     if s0.last
       r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
       r0.extend(Number0)
-      r0.extend(Number1)
     else
       self.index = i0
       r0 = nil
