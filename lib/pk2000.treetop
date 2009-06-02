@@ -83,7 +83,7 @@ grammar Pk2000
    end
 
    rule prefix
-      "-" / "!"
+      ("-" &[A-Z0-9]) / "!"
    end
 
    rule term

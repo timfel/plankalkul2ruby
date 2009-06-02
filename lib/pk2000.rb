@@ -178,7 +178,7 @@ module Pk2000
   module VTuple3
 	 def toRuby
 	    # only need comma-delimited list of var-names
-	    text_value.gsub(/\(|\)|\[[^V]*\]/, "")
+	    text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase
 	 end
   end
 
@@ -1345,6 +1345,9 @@ module Pk2000
     return r0
   end
 
+  module Prefix0
+  end
+
   def _nt_prefix
     start_index = index
     if node_cache[:prefix].has_key?(index)
@@ -1354,25 +1357,50 @@ module Pk2000
     end
 
     i0 = index
+    i1, s1 = index, []
     if input.index("-", index) == index
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
       @index += 1
     else
       terminal_parse_failure("-")
+      r2 = nil
+    end
+    s1 << r2
+    if r2
+      i3 = index
+      if input.index(Regexp.new('[A-Z0-9]'), index) == index
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        r4 = nil
+      end
+      if r4
+        self.index = i3
+        r3 = instantiate_node(SyntaxNode,input, index...index)
+      else
+        r3 = nil
+      end
+      s1 << r3
+    end
+    if s1.last
+      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1.extend(Prefix0)
+    else
+      self.index = i1
       r1 = nil
     end
     if r1
       r0 = r1
     else
       if input.index("!", index) == index
-        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("!")
-        r2 = nil
+        r5 = nil
       end
-      if r2
-        r0 = r2
+      if r5
+        r0 = r5
       else
         self.index = i0
         r0 = nil
