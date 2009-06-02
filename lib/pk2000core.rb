@@ -14,6 +14,10 @@ class PKVariable
       @@instances = {}
    end
 
+   def coerce other
+      return self, other
+   end
+
    def initialize array
       @name = array.first.upcase.to_sym
       @type = strToComp(array.last)
@@ -164,12 +168,9 @@ class PKWhileNode < Treetop::Runtime::SyntaxNode
       return nil
    end
    def toRubyFor
-      s = "(0..("+forToGet.toRuby+")).times" 
-      if count
-	 s << "_with_index do |x,i|\n ("
-      else
-	 s << " do |x|\n"
-      end 
+      s = "("+forToGet.toRuby+").times do " 
+      s << " |i|" if count
+      s << " \n ("
    end
    def toRubyWhile
       s = "i = 0\nflag=true\n" if count.text_value == "1"
