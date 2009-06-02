@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby1.9
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), "lib")
 
 require 'pk2000core'
 require 'optparse'
