@@ -9,4 +9,6 @@ END"
 
 require 'pk2000core'
 PARSER  = Pk2000Parser.new
+TESTPROG = "15=>Z0[:4.0]
+1=>Z1[:4.0]"
 TREE = PARSER.parse(PROGRAM)
