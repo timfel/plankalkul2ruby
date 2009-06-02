@@ -93,7 +93,7 @@ describe "Parser" do
    end
 
    it "calls forward other functions" do
-      eachNil? ["R0815[1:0](1)", "R815[:0](1,V0[:0])"], false
+      eachNil? ["R0815[1:0](1)", "R815[:0](1,V0[:0])", "R3(Z1:8.0, Z3:8.0)[0]:4.0"], false
       eachNil? ["R01(1)"], true
    end
 
