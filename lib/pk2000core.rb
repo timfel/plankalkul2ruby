@@ -10,6 +10,10 @@ class PKVariable
       return i
    end
 
+   def method_missing(meth, *args, &block)
+      self.to_i.send(meth, *args, &block)
+   end
+
    def self.resetVariableSpace
       @@instances = {}
    end
@@ -229,7 +233,7 @@ class PKOperationNode < Treetop::Runtime::SyntaxNode
       operator = @@replacers[op.text_value] || op.text_value
       s = " ("
       s << prefix.text_value if respond_to? :prefix
-      s << term.toRuby << operator << condition.toRuby << ") "
+      s << term.toRuby << operator << statement.toRuby << ") "
    end
 end
 
