@@ -36,6 +36,8 @@ describe PKVariable do
       (v4_1 - 1).should == 1
       (v4_1 * 2).should == 4
       (v4_1 / 2).should == 1
+      v4_1 <= -1
+      v4_1.to_i.should == -1
    end
 
    it "selects always the same variable with the same selector" do
@@ -111,8 +113,8 @@ describe "Parser" do
    end
 
    it "assigns me all the data I desire" do
-      eachNil? ["V0[:0]=>Z0[:0]", "(V0[:0],V1[:0])=>(Z0[0:0],Z0[1:0])", "3=>R0[:2.0]"], false
-      eachNil? ["3=>1", "-1=>Z0[:0]"], true
+      eachNil? ["V0[:0]=>Z0[:0]", "(V0[:0],V1[:0])=>(Z0[0:0],Z0[1:0])", "3=>R0[:2.0]", "-1=>Z0[:0]"], false
+      eachNil? ["3=>1"], true
    end
 
    it "unconditionally conditionalizes all implications" do
