@@ -50,13 +50,14 @@ end
 options = OptParse.parse(ARGV)
 puts options if options[:verbose]
 parser = Pk2000Parser.new
-pkCode = File.open(options[:in]).read.gsub(" ", "")
+pkCode = File.open(options[:in]).read.gsub(" ", "").gsub("\n]", "]").gsub("[\n", "[").gsub("\n\n","\n")
 pkCode.chop! if pkCode[-1] == "\n"
 puts pkCode if options[:verbose]
 tree = parser.parse(pkCode)
 rbCode = tree.toRuby
 puts rbCode if options[:verbose]
 out = File.open(options[:out], 'w')
+out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000core'\n"
 out << rbCode
 out.close
 
