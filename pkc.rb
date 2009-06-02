@@ -51,7 +51,7 @@ puts options if options[:verbose]
 parser = Pk2000Parser.new
 pkCode = File.open(options[:in]).read.gsub(" ", "")
 pkCode.chop! if pkCode[-1] == "\n"
-pp pkCode if options[:verbose]
+puts pkCode if options[:verbose]
 tree = parser.parse(pkCode)
 rbCode = tree.toRuby
 puts rbCode if options[:verbose]
