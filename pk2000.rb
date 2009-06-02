@@ -11,11 +11,11 @@ module Pk2000
     end
 
     def randauszug
-      elements[3]
+      elements[2]
     end
 
     def lines
-      elements[5]
+      elements[4]
     end
 
   end
@@ -42,39 +42,29 @@ module Pk2000
       r3 = _nt_number
       s1 << r3
       if r3
-        if input.index(" ", index) == index
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
-        else
-          terminal_parse_failure(" ")
-          r4 = nil
-        end
+        r4 = _nt_randauszug
         s1 << r4
         if r4
-          r5 = _nt_randauszug
+          if input.index("\n", index) == index
+            r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("\n")
+            r5 = nil
+          end
           s1 << r5
           if r5
-            if input.index("\n", index) == index
-              r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
-            else
-              terminal_parse_failure("\n")
-              r6 = nil
-            end
+            r6 = _nt_lines
             s1 << r6
             if r6
-              r7 = _nt_lines
-              s1 << r7
-              if r7
-                if input.index("\nEND", index) == index
-                  r8 = instantiate_node(SyntaxNode,input, index...(index + 4))
-                  @index += 4
-                else
-                  terminal_parse_failure("\nEND")
-                  r8 = nil
-                end
-                s1 << r8
+              if input.index("\nEND", index) == index
+                r7 = instantiate_node(SyntaxNode,input, index...(index + 4))
+                @index += 4
+              else
+                terminal_parse_failure("\nEND")
+                r7 = nil
               end
+              s1 << r7
             end
           end
         end
@@ -90,9 +80,9 @@ module Pk2000
     if r1
       r0 = r1
     else
-      r9 = _nt_lines
-      if r9
-        r0 = r9
+      r8 = _nt_lines
+      if r8
+        r0 = r8
       else
         self.index = i0
         r0 = nil
@@ -1230,11 +1220,11 @@ module Pk2000
               r8 = _nt_type
               s0 << r8
               if r8
-                if input.index("] (", index) == index
-                  r9 = instantiate_node(SyntaxNode,input, index...(index + 3))
-                  @index += 3
+                if input.index("](", index) == index
+                  r9 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                  @index += 2
                 else
-                  terminal_parse_failure("] (")
+                  terminal_parse_failure("](")
                   r9 = nil
                 end
                 s0 << r9

@@ -1,7 +1,7 @@
 grammar Pk2000
 
    rule program 
-      "P" number " " randauszug "\n" lines "\nEND" <PKMethodNode>
+      "P" number randauszug "\n" lines "\nEND" <PKMethodNode>
       / lines
    end
 
@@ -71,7 +71,7 @@ grammar Pk2000
    end
 
    rule call
-      "R" [0-9]+ "[" component? ":" type "] (" term2 (comma term2)* ")" <PKCallNode>
+      "R" [0-9]+ "[" component? ":" type "](" term2 (comma term2)* ")" <PKCallNode>
    end
 
    rule prefix
