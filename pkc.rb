@@ -2,6 +2,7 @@
 
 require 'pk2000core'
 require 'optparse'
+require 'pp'
 
 class OptParse
    def self.parse(args)
@@ -34,19 +35,24 @@ class OptParse
 	 end 
       end
       opts.parse!(args)
-      mandatory.each do |o,error|
-	 puts error unless options[o]
-	 exit 1
+      mandatory.each_pair do |o,error|
+	 unless options[o]
+	    puts error
+	    exit 1
+	 end
       end
       options[:out] ||= options[:in].gsub(/\..*$/, ".rb")
+      options
    end
 end
 
 options = OptParse.parse(ARGV)
-
+puts options if options[:verbose]
 parser = Pk2000Parser.new
-pkCode = File.open(options[:in]).read
-tree = parser.parse(code)
+pkCode = File.open(options[:in]).read.gsub(" ", "")
+pkCode.chop! if pkCode[-1] == "\n"
+pp pkCode if options[:verbose]
+tree = parser.parse(pkCode)
 rbCode = tree.toRuby
 puts rbCode if options[:verbose]
 out = File.open(options[:out], 'w')
