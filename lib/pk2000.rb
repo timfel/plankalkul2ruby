@@ -1439,20 +1439,25 @@ module Pk2000
     end
 
     i0 = index
-    r1 = _nt_variable
+    r1 = _nt_genericVariable
     if r1
       r0 = r1
     else
-      r2 = _nt_constant
+      r2 = _nt_variable
       if r2
         r0 = r2
       else
-        r3 = _nt_count
+        r3 = _nt_constant
         if r3
           r0 = r3
         else
-          self.index = i0
-          r0 = nil
+          r4 = _nt_count
+          if r4
+            r0 = r4
+          else
+            self.index = i0
+            r0 = nil
+          end
         end
       end
     end

@@ -87,7 +87,7 @@ grammar Pk2000
    end
 
    rule term
-      variable / constant / count
+      genericVariable / variable / constant / count
    end 
 
    rule tuple
