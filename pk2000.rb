@@ -178,7 +178,7 @@ module Pk2000
   module VTuple3
 	 def toRuby
 	    # only need comma-delimited list of var-names
-	    text_value.gsub(/\(|\)|\[[^V]*\]/, "").lowercase
+	    text_value.gsub(/\(|\)|\[[^V]*\]/, "")
 	 end
   end
 
