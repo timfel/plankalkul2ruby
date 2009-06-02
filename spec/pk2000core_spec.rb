@@ -92,7 +92,7 @@ describe "Parser" do
 
    it "calls forward other functions" do
       eachNil? ["R0815[1:0](1)", "R815[:0](1,V0[:0])"], false
-      eachNil? ["R01(1)", "R0[:0]"], true
+      eachNil? ["R01(1)"], true
    end
 
    it "puts blocks into context" do
