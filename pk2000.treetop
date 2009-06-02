@@ -74,12 +74,20 @@ grammar Pk2000
       "R" [0-9]+ "[" component? ":" type "](" term2 (comma term2)* ")" <PKCallNode>
    end
 
+   rule count
+      "N(" variable ")" {
+	 def toRuby
+	    variable.toRuby+".dimension"
+	 end
+      }
+   end
+
    rule prefix
       "-" / "!"
    end
 
    rule term
-      variable / constant 
+      variable / constant / count
    end 
 
    rule tuple
