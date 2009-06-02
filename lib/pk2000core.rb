@@ -96,12 +96,8 @@ class PKVariable
 
    [:+, :-, :*, :/].each do |item|
       define_method(item) do |term|
-	 if term.is_a? Integer
-	    self.to_i.send(item, term)
-	 elsif term.class == self.class
-	    dimensionTest! term.dimension
-	    self.to_i.send(item, term.to_i)
-	 end 
+	 dimensionTest! term.dimension if term.class == self.class
+	 self.to_i.send(item, term.to_i)
       end
    end
 
