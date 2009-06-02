@@ -99,11 +99,8 @@ class PKVariable
 	 if term.is_a? Integer
 	    self.to_i.send(item, term)
 	 elsif term.class == self.class
-	    if dimension == term.dimension
-	       self.to_i.send(item, term.to_i)
-	    else
-	       raise ArgumentError,("Not the same dimension: I am "+dimension.to_s+ " and got "+term.dimension.to_s)
-	    end
+	    dimensionTest! term.dimension
+	    self.to_i.send(item, term.to_i)
 	 end 
       end
    end
@@ -123,8 +120,8 @@ class PKVariable
    end
 
    def assignInt int
-      # Remember: We are BigEndian with Zuse, and overflow is disregarded
-      bitField = int.to_s(2).reverse
+      # Remember: We are BigEndian with Zuse, and overflow is disregarded, only positives!
+      bitField = (int%dimension).to_s(2).reverse
       @workingBounds.to_a.each_with_index do |item,i|
 	 @array[item] = bitField[i].to_i
       end
@@ -134,13 +131,16 @@ class PKVariable
       @workingBounds.to_a.size
    end
 
-   def assignPKVariable var
+   def dimensionTest! otherDim
       # only variables with the same dimension may be combined
-      if dimension == var.dimension
-	 assignInt var.to_i
-      else
-	 raise ArgumentError,("Not the same dimension: I am "+dimension.to_s+ " and got "+var.dimension.to_s)
+      if dimension != otherDim
+	 raise ArgumentError,("Not the same dimension: I am "+dimension.to_s+ " and got "+otherDim.to_s)
       end
+   end
+
+   def assignPKVariable var
+      dimensionTest! var.dimension
+      assignInt var.to_i
    end
 end
 
