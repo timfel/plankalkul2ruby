@@ -194,7 +194,9 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
       s = ""
       text_value.split(",").each do |input| 	 
 	 input =~ /(.*)\[(.*):(.*)\]/
-	 s << ("PKVariable.instance("+[$1, $2, $3].to_s+")").gsub(/\(|\)/, "")
+	 a = [$1, $2, $3]
+	 a.collect! { |x| x.gsub(/\(|\)/, "") }
+	 s << ("PKVariable.instance("+a.to_s+")")
 	 s << "," unless input == text_value.split(",").last
       end
       s
