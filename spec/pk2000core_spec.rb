@@ -83,7 +83,7 @@ describe "Parser" do
    end
 
    it "can read operations" do
-      eachNil? ["-1+2", "1+1", "2*1", "1+2+3", "V0[:8.0]/2", "15-V0[:8.0]"], false
+      eachNil? ["-1+2", "1+1", "2*1", "1+2+3", "V0[:8.0]/2", "15-V0[:8.0]", "i*Z0[:32.0]"], false
       eachNil? ["1++2", "2**1"], true
    end
 
@@ -113,7 +113,7 @@ describe "Parser" do
    end
 
    it "assigns me all the data I desire" do
-      eachNil? ["V0[:0]=>Z0[:0]", "(V0[:0],V1[:0])=>(Z0[0:0],Z0[1:0])", "3=>R0[:2.0]", "-1=>Z0[:0]"], false
+      eachNil? ["V0[:0]=>Z0[:0]", "3=>R0[:2.0]", "-1=>Z0[:0]", "(V0[:0],V1[:0])=>(Z0[0:0],Z0[1:0])"], false
       eachNil? ["3=>1"], true
    end
 
