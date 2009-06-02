@@ -117,6 +117,10 @@ describe "Parser" do
       eachNil? ["3=>1"], true
    end
 
+   it "can have brackets around each statement, term+prefix or lines" do
+      eachNil? ["(5)", "(-5)", "(5+2->1=>R0[:0])"], false
+   end 
+
    it "unconditionally conditionalizes all implications" do
       eachNil? ["5+2->1=>R0[:0]", "V0[:0]->(Z0[:0],Z1[:0])"], false
       eachNil? ["!->5", "FIN->5", "1->5"], true
