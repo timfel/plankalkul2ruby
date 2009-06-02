@@ -97,7 +97,7 @@ describe "Parser" do
 
    it "puts blocks into context" do
       eachNil? ["[5+5\n2+7]", "[4->5]"], false
-      eachNil? ["[5]", "[]", "[5+5", "5+5]"], true
+      eachNil? ["[]", "[5+5", "5+5]"], true
    end
 
    it "breaks multi-level cycles" do
