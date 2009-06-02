@@ -5,13 +5,13 @@ class PKVariable
    @@instances = {}
 
    def self.instance array
-      i = (@@instances[array.first.to_sym] || self.new(array))
+      i = (@@instances[array.first.lowercase.to_sym] || self.new(array))
       i.component(array[1],array.last)
       return i
    end
 
    def initialize array
-      @name = array.first.to_sym
+      @name = array.first.lowercase.to_sym
       @type = strToComp(array.last)
       size = @type.inject(1) do |r,x| 
 	 unless x == 0
@@ -223,9 +223,9 @@ end
 
 class PKMethodNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      s = "define_method('PK"+number.text_value+"') { |"+randauszug.vTuple.toRuby+"|"
+      s = "def PK"+number.text_value+"("+randauszug.vTuple.toRuby+")"
       s << "\n" << lines.toRuby
-      s << "\nreturn "+randauszug.rTuple.toRuby << "}"
+      s << "\nreturn "+randauszug.rTuple.toRuby << "\nend"
       s
    end
 end
