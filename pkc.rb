@@ -16,6 +16,10 @@ class OptParse
 	    options[:verbose] = v
 	 end
 
+	 opts.on("-c", "--call", "Add a function call for direct execution ") do |v|
+	    options[:call] = v
+	 end
+
 	 opts.on("-i", "--input FILE", "PK Sourcecode") do |f|
 	    options[:in] = f
 	 end
@@ -59,5 +63,12 @@ puts rbCode if options[:verbose]
 out = File.open(options[:out], 'w')
 out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000core'\n"
 out << rbCode
+if options[:call]
+   out << "\n"
+   rbCode =~ /def (PK[0-9]*\(.*\))/
+   name = $1
+   name.gsub!(/v[0-9]/, "1")
+   out << "\nputs "+name+".to_i"
+end
 out.close
 
