@@ -83,6 +83,20 @@ class PKVariable
       end
    end
 
+   [:+, :-, :*, :/].each do |item|
+      define_method(item) do |term|
+	 if term.is_a? Integer
+	    self.to_i.send(item, term)
+	 elsif term.class == self.class
+	    if dimension == term.dimension
+	       self.to_i.send(item, term.to_i)
+	    else
+	       raise "Not the same dimension: I am "+dimension.to_s+ " and got "+var.dimension.to_s
+	    end
+	 end 
+      end
+   end
+
    def to_i
       s = "0b"
       @array[@workingBounds].reverse.each {|item| s << item.to_s}
