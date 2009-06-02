@@ -108,7 +108,7 @@ grammar Pk2000
    end
 
    rule constant
-      number / logConstant
+      "0" / number / logConstant 
    end
 
    rule logConstant
@@ -140,7 +140,7 @@ grammar Pk2000
    end
 
    rule component
-      number dot component / term2 / variable / genericVariable / number 
+      [0-9]+ dot component / term2 / [0-9]+ / variable / genericVariable
    end
 
    rule genericVariable

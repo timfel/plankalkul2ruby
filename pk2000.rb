@@ -1873,16 +1873,27 @@ module Pk2000
     end
 
     i0 = index
-    r1 = _nt_number
+    if input.index("0", index) == index
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure("0")
+      r1 = nil
+    end
     if r1
       r0 = r1
     else
-      r2 = _nt_logConstant
+      r2 = _nt_number
       if r2
         r0 = r2
       else
-        self.index = i0
-        r0 = nil
+        r3 = _nt_logConstant
+        if r3
+          r0 = r3
+        else
+          self.index = i0
+          r0 = nil
+        end
       end
     end
 
@@ -2335,10 +2346,6 @@ module Pk2000
   end
 
   module Component0
-    def number
-      elements[0]
-    end
-
     def dot
       elements[1]
     end
@@ -2358,14 +2365,33 @@ module Pk2000
 
     i0 = index
     i1, s1 = index, []
-    r2 = _nt_number
+    s2, i2 = [], index
+    loop do
+      if input.index(Regexp.new('[0-9]'), index) == index
+        r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        r3 = nil
+      end
+      if r3
+        s2 << r3
+      else
+        break
+      end
+    end
+    if s2.empty?
+      self.index = i2
+      r2 = nil
+    else
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+    end
     s1 << r2
     if r2
-      r3 = _nt_dot
-      s1 << r3
-      if r3
-        r4 = _nt_component
-        s1 << r4
+      r4 = _nt_dot
+      s1 << r4
+      if r4
+        r5 = _nt_component
+        s1 << r5
       end
     end
     if s1.last
@@ -2378,21 +2404,40 @@ module Pk2000
     if r1
       r0 = r1
     else
-      r5 = _nt_term2
-      if r5
-        r0 = r5
+      r6 = _nt_term2
+      if r6
+        r0 = r6
       else
-        r6 = _nt_variable
-        if r6
-          r0 = r6
-        else
-          r7 = _nt_genericVariable
-          if r7
-            r0 = r7
+        s7, i7 = [], index
+        loop do
+          if input.index(Regexp.new('[0-9]'), index) == index
+            r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
           else
-            r8 = _nt_number
-            if r8
-              r0 = r8
+            r8 = nil
+          end
+          if r8
+            s7 << r8
+          else
+            break
+          end
+        end
+        if s7.empty?
+          self.index = i7
+          r7 = nil
+        else
+          r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+        end
+        if r7
+          r0 = r7
+        else
+          r9 = _nt_variable
+          if r9
+            r0 = r9
+          else
+            r10 = _nt_genericVariable
+            if r10
+              r0 = r10
             else
               self.index = i0
               r0 = nil
