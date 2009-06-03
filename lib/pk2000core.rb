@@ -102,11 +102,8 @@ class PKVariable
    end
 
    def == term
-      if term.class == self.class
-	 (term.dimension == self.dimension) && (term.to_i == self.to_i)
-      else
-	 false
-      end
+      dimensionTest! term.dimension if term.class == self.class
+      (term.to_i % dimension ** 2) == self.to_i 
    end
 
    def to_i
