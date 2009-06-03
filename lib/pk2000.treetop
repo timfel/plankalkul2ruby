@@ -141,7 +141,7 @@ grammar Pk2000
    end
 
    rule type
-      simpleType / number dot type / tupleType 
+      simpleType / tupleType / number dot type
    end
 
    rule tupleType

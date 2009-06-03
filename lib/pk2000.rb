@@ -2443,30 +2443,30 @@ module Pk2000
     if r1
       r0 = r1
     else
-      i2, s2 = index, []
-      r3 = _nt_number
-      s2 << r3
-      if r3
-        r4 = _nt_dot
-        s2 << r4
-        if r4
-          r5 = _nt_type
-          s2 << r5
-        end
-      end
-      if s2.last
-        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
-        r2.extend(Type0)
-      else
-        self.index = i2
-        r2 = nil
-      end
+      r2 = _nt_tupleType
       if r2
         r0 = r2
       else
-        r6 = _nt_tupleType
-        if r6
-          r0 = r6
+        i3, s3 = index, []
+        r4 = _nt_number
+        s3 << r4
+        if r4
+          r5 = _nt_dot
+          s3 << r5
+          if r5
+            r6 = _nt_type
+            s3 << r6
+          end
+        end
+        if s3.last
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          r3.extend(Type0)
+        else
+          self.index = i3
+          r3 = nil
+        end
+        if r3
+          r0 = r3
         else
           self.index = i0
           r0 = nil
