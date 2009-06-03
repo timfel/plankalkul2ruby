@@ -36,8 +36,15 @@ describe PKVariable do
       (v4_1 - 1).should == 1
       (v4_1 * 2).should == 4
       (v4_1 / 2).should == 1
+      # einmal für negative zuweisung
       v4_1 <= -1
-      v4_1.to_i.should == -1
+      (v4_1 == -1).should == true
+      # einmal für zuweisung im wertebereich
+      v4_1 <= 4
+      (v4_1 == 4).should == true
+      # einmal für zuweisung oberhalb des wertebereiches
+      v4_1 <= 128
+      (v4_1 == 128).should == true
    end
 
    it "selects always the same variable with the same selector" do
