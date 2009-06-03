@@ -93,7 +93,7 @@ describe "Parser" do
    end
 
    it "calls forward other functions" do
-      eachNil? ["R0815[1:0](1)", "R815[:0](1,V0[:0])", "R3(Z1:8.0, Z3:8.0)[0]:4.0"], false
+      eachNil? ["R0815[1:0](1)", "R815[:0](1,V0[:0])", "R3[0:4.0](Z1[:8.0],Z3[:8.0])"], false
       eachNil? ["R01(1)"], true
    end
 
@@ -110,6 +110,12 @@ describe "Parser" do
    it "loops endlessly whenever I call" do
       eachNil? ["w1(V0[:0]-1)[1+2]", "w[3+4]", "w1(5)[5+6]", "W1[7+8]"], false
       eachNil? ["w2[3+4]"], true
+   end
+
+   it "can understand tuples" do
+      # tuples in pk2000 are not terms in their own right, they can only be used as types and 
+      # in assignments or conditions
+      eachNil? ["(Z0[:2.0],Z1[:2.0])=(1,2)", "(Z0[:2.0],5)=(1,2)", "Z0:[:(8.0,6.0)]"], false
    end
 
    it "assigns me all the data I desire" do
