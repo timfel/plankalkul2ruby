@@ -608,6 +608,13 @@ module Pk2000
     return r0
   end
 
+  module Statement0
+    def statement
+      elements[1]
+    end
+
+  end
+
   def _nt_statement
     start_index = index
     if node_cache[:statement].has_key?(index)
@@ -641,8 +648,42 @@ module Pk2000
               if r6
                 r0 = r6
               else
-                self.index = i0
-                r0 = nil
+                i7, s7 = index, []
+                if input.index("(", index) == index
+                  r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  @index += 1
+                else
+                  terminal_parse_failure("(")
+                  r8 = nil
+                end
+                s7 << r8
+                if r8
+                  r9 = _nt_statement
+                  s7 << r9
+                  if r9
+                    if input.index(")", index) == index
+                      r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                      @index += 1
+                    else
+                      terminal_parse_failure(")")
+                      r10 = nil
+                    end
+                    s7 << r10
+                  end
+                end
+                if s7.last
+                  r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+                  r7.extend(Statement0)
+                else
+                  self.index = i7
+                  r7 = nil
+                end
+                if r7
+                  r0 = r7
+                else
+                  self.index = i0
+                  r0 = nil
+                end
               end
             end
           end

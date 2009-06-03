@@ -31,7 +31,7 @@ grammar Pk2000
    end
 
    rule statement
-      (assignment / ifThen / while / block / builtIns / term2)
+      assignment / ifThen / while / block / builtIns / term2 / "(" statement ")" 
    end
    
    rule assignment
