@@ -4,6 +4,10 @@ require 'pk2000'
 class PKVariable
    @@instances = {}
 
+   def self.define array, int
+      instance(array).tap { |i| i.assignInt(int) }
+   end
+
    def self.instance array
       i = (@@instances[array.first.upcase.to_sym] || self.new(array))
       i.component(array[1],array.last)
@@ -232,7 +236,10 @@ end
 
 class PKMethodNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      s = "def PK"+number.text_value+"("+randauszug.vTuple.toRuby+")"
+      s = "def PK"+number.text_value+"("+randauszug.vTuple.toRuby+")\n"
+      randauszug.vTuple.toRuby.split(",").each do |item|
+	 s << "PKVariable.define(['"+item+"', '', ':32.0'], "+item+")\n"
+      end
       s << "\n" << lines.toRuby
       s << "\nreturn "+randauszug.rTuple.toRuby << "\nend"
       s
