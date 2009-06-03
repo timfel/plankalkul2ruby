@@ -115,7 +115,7 @@ describe "Parser" do
    it "can understand tuples" do
       # tuples in pk2000 are not terms in their own right, they can only be used as types and 
       # in assignments or conditions
-      eachNil? ["(Z0[:2.0],Z1[:2.0])=(1,2)", "(Z0[:2.0],5)=(1,2)", "Z0:[:(8.0,6.0)]"], false
+      eachNil? ["(Z0[:2.0],Z1[:2.0])=(1,2)", "(Z0[:2.0],5)=(1,2)", "Z0[:(8.0,6.0)]"], false
    end
 
    it "assigns me all the data I desire" do
