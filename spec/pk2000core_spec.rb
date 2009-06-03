@@ -128,8 +128,8 @@ describe "Parser" do
    end 
 
    it "unconditionally conditionalizes all implications" do
-      eachNil? ["5+2->1=>R0[:0]", "V0[:0]->(Z0[:0],Z1[:0])=>(Z1[:0],Z0[:0])"], false
-      eachNil? ["!->5", "FIN->5", "1->5"], true
+      eachNil? ["5+2->1=>R0[:0]", "1->5", "V0[:0]->(Z0[:0],Z1[:0])=>(Z1[:0],Z0[:0])"], false
+      eachNil? ["!->5", "FIN->5"], true
    end
 
    it "can request dimensions of a given variable" do
