@@ -94,10 +94,10 @@ class PKVariable
       end
    end
 
-   [:+, :-, :*, :/].each do |item|
+   [:+, :-, :*, :/, :<, :>, :~].each do |item|
       define_method(item) do |term|
 	 dimensionTest! term.dimension if term.class == self.class
-	 self.to_i.send(item, term.to_i)
+	 self.to_i.send(item, term.to_i % dimension ** 2)
       end
    end
 
@@ -117,7 +117,7 @@ class PKVariable
 
    def assignInt int
       # Remember: We are BigEndian with Zuse, and overflow is disregarded, only positives!
-      bitField = (int%dimension).to_s(2).reverse
+      bitField = (int % dimension**2).to_s(2).reverse
       @workingBounds.to_a.each_with_index do |item,i|
 	 @array[item] = bitField[i].to_i
       end
