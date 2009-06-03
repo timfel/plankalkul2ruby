@@ -226,7 +226,7 @@ class PKOperationNode < Treetop::Runtime::SyntaxNode
       operator = @@replacers[op.text_value] || op.text_value
       s = " ("
       s << prefix.text_value if respond_to? :prefix
-      s << term.toRuby << operator << statement.toRuby << ") "
+      s << prefixedTerm.toRuby << operator << condition.toRuby << ") "
    end
 end
 
