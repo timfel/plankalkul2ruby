@@ -87,10 +87,17 @@ grammar Pk2000
    end
 
    rule term
-      genericVariable / variable / constant / count
+      genericVariable / variable / constant / count 
    end 
 
+   rule prefixedTerm
+      prefix term / term / "(" term2 ")"
+   end
+
+
    rule tuple
+      varTuple
+      /
       "(" first:term2 rest:(comma next:term2)+ ")" <PKIterativeNode>
    end
 
@@ -99,20 +106,14 @@ grammar Pk2000
    end
 
    rule condition
-      prefix? term op:("=" / "<" / ">") condition <PKOperationNode>
+      prefixedTerm op:("=" / "<" / ">") condition <PKOperationNode>
       / tuple "=" tuple
       / operation
    end
 
    rule operation
-      prefix? term op:("+" / "-" / "*" / "/" / "&" / "|" / "~") condition <PKOperationNode>
-      / prefix? term {
-	 def toRuby
-            s = "" 
-	    s << prefix.text_value if respond_to?(:prefix)
-	    s << term.toRuby
-	 end
-      }
+      prefixedTerm op:("+" / "-" / "*" / "/" / "&" / "|" / "~") condition <PKOperationNode>
+      / prefixedTerm 
    end
 
    rule constant
@@ -140,7 +141,7 @@ grammar Pk2000
    end
 
    rule type
-      number dot type / tupleType / simpleType
+      simpleType / number dot type / tupleType 
    end
 
    rule tupleType

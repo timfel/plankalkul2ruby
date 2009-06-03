@@ -1467,6 +1467,97 @@ module Pk2000
     return r0
   end
 
+  module PrefixedTerm0
+    def prefix
+      elements[0]
+    end
+
+    def term
+      elements[1]
+    end
+  end
+
+  module PrefixedTerm1
+    def term2
+      elements[1]
+    end
+
+  end
+
+  def _nt_prefixedTerm
+    start_index = index
+    if node_cache[:prefixedTerm].has_key?(index)
+      cached = node_cache[:prefixedTerm][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0 = index
+    i1, s1 = index, []
+    r2 = _nt_prefix
+    s1 << r2
+    if r2
+      r3 = _nt_term
+      s1 << r3
+    end
+    if s1.last
+      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1.extend(PrefixedTerm0)
+    else
+      self.index = i1
+      r1 = nil
+    end
+    if r1
+      r0 = r1
+    else
+      r4 = _nt_term
+      if r4
+        r0 = r4
+      else
+        i5, s5 = index, []
+        if input.index("(", index) == index
+          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure("(")
+          r6 = nil
+        end
+        s5 << r6
+        if r6
+          r7 = _nt_term2
+          s5 << r7
+          if r7
+            if input.index(")", index) == index
+              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(")")
+              r8 = nil
+            end
+            s5 << r8
+          end
+        end
+        if s5.last
+          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          r5.extend(PrefixedTerm1)
+        else
+          self.index = i5
+          r5 = nil
+        end
+        if r5
+          r0 = r5
+        else
+          self.index = i0
+          r0 = nil
+        end
+      end
+    end
+
+    node_cache[:prefixedTerm][start_index] = r0
+
+    return r0
+  end
+
   module Tuple0
     def comma
       elements[0]
@@ -1496,66 +1587,78 @@ module Pk2000
       return cached
     end
 
-    i0, s0 = index, []
-    if input.index("(", index) == index
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
-    else
-      terminal_parse_failure("(")
-      r1 = nil
-    end
-    s0 << r1
+    i0 = index
+    r1 = _nt_varTuple
     if r1
-      r2 = _nt_term2
-      s0 << r2
-      if r2
-        s3, i3 = [], index
-        loop do
-          i4, s4 = index, []
-          r5 = _nt_comma
-          s4 << r5
+      r0 = r1
+    else
+      i2, s2 = index, []
+      if input.index("(", index) == index
+        r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("(")
+        r3 = nil
+      end
+      s2 << r3
+      if r3
+        r4 = _nt_term2
+        s2 << r4
+        if r4
+          s5, i5 = [], index
+          loop do
+            i6, s6 = index, []
+            r7 = _nt_comma
+            s6 << r7
+            if r7
+              r8 = _nt_term2
+              s6 << r8
+            end
+            if s6.last
+              r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+              r6.extend(Tuple0)
+            else
+              self.index = i6
+              r6 = nil
+            end
+            if r6
+              s5 << r6
+            else
+              break
+            end
+          end
+          if s5.empty?
+            self.index = i5
+            r5 = nil
+          else
+            r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          end
+          s2 << r5
           if r5
-            r6 = _nt_term2
-            s4 << r6
+            if input.index(")", index) == index
+              r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(")")
+              r9 = nil
+            end
+            s2 << r9
           end
-          if s4.last
-            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-            r4.extend(Tuple0)
-          else
-            self.index = i4
-            r4 = nil
-          end
-          if r4
-            s3 << r4
-          else
-            break
-          end
-        end
-        if s3.empty?
-          self.index = i3
-          r3 = nil
-        else
-          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        end
-        s0 << r3
-        if r3
-          if input.index(")", index) == index
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
-          else
-            terminal_parse_failure(")")
-            r7 = nil
-          end
-          s0 << r7
         end
       end
-    end
-    if s0.last
-      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
-      r0.extend(Tuple1)
-    else
-      self.index = i0
-      r0 = nil
+      if s2.last
+        r2 = instantiate_node(PKIterativeNode,input, i2...index, s2)
+        r2.extend(Tuple1)
+      else
+        self.index = i2
+        r2 = nil
+      end
+      if r2
+        r0 = r2
+      else
+        self.index = i0
+        r0 = nil
+      end
     end
 
     node_cache[:tuple][start_index] = r0
@@ -1660,16 +1763,16 @@ module Pk2000
   end
 
   module Condition0
-    def term
-      elements[1]
+    def prefixedTerm
+      elements[0]
     end
 
     def op
-      elements[2]
+      elements[1]
     end
 
     def condition
-      elements[3]
+      elements[2]
     end
   end
 
@@ -1693,58 +1796,49 @@ module Pk2000
 
     i0 = index
     i1, s1 = index, []
-    r3 = _nt_prefix
-    if r3
-      r2 = r3
-    else
-      r2 = instantiate_node(SyntaxNode,input, index...index)
-    end
+    r2 = _nt_prefixedTerm
     s1 << r2
     if r2
-      r4 = _nt_term
-      s1 << r4
+      i3 = index
+      if input.index("=", index) == index
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("=")
+        r4 = nil
+      end
       if r4
-        i5 = index
-        if input.index("=", index) == index
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r3 = r4
+      else
+        if input.index("<", index) == index
+          r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
-          terminal_parse_failure("=")
-          r6 = nil
+          terminal_parse_failure("<")
+          r5 = nil
         end
-        if r6
-          r5 = r6
+        if r5
+          r3 = r5
         else
-          if input.index("<", index) == index
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          if input.index(">", index) == index
+            r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
             @index += 1
           else
-            terminal_parse_failure("<")
-            r7 = nil
+            terminal_parse_failure(">")
+            r6 = nil
           end
-          if r7
-            r5 = r7
+          if r6
+            r3 = r6
           else
-            if input.index(">", index) == index
-              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
-            else
-              terminal_parse_failure(">")
-              r8 = nil
-            end
-            if r8
-              r5 = r8
-            else
-              self.index = i5
-              r5 = nil
-            end
+            self.index = i3
+            r3 = nil
           end
         end
-        s1 << r5
-        if r5
-          r9 = _nt_condition
-          s1 << r9
-        end
+      end
+      s1 << r3
+      if r3
+        r7 = _nt_condition
+        s1 << r7
       end
     end
     if s1.last
@@ -1757,36 +1851,36 @@ module Pk2000
     if r1
       r0 = r1
     else
-      i10, s10 = index, []
-      r11 = _nt_tuple
-      s10 << r11
-      if r11
+      i8, s8 = index, []
+      r9 = _nt_tuple
+      s8 << r9
+      if r9
         if input.index("=", index) == index
-          r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
           terminal_parse_failure("=")
-          r12 = nil
+          r10 = nil
         end
-        s10 << r12
+        s8 << r10
+        if r10
+          r11 = _nt_tuple
+          s8 << r11
+        end
+      end
+      if s8.last
+        r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+        r8.extend(Condition1)
+      else
+        self.index = i8
+        r8 = nil
+      end
+      if r8
+        r0 = r8
+      else
+        r12 = _nt_operation
         if r12
-          r13 = _nt_tuple
-          s10 << r13
-        end
-      end
-      if s10.last
-        r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
-        r10.extend(Condition1)
-      else
-        self.index = i10
-        r10 = nil
-      end
-      if r10
-        r0 = r10
-      else
-        r14 = _nt_operation
-        if r14
-          r0 = r14
+          r0 = r12
         else
           self.index = i0
           r0 = nil
@@ -1800,31 +1894,17 @@ module Pk2000
   end
 
   module Operation0
-    def term
-      elements[1]
+    def prefixedTerm
+      elements[0]
     end
 
     def op
-      elements[2]
+      elements[1]
     end
 
     def condition
-      elements[3]
+      elements[2]
     end
-  end
-
-  module Operation1
-    def term
-      elements[1]
-    end
-  end
-
-  module Operation2
-	 def toRuby
-    s = "" 
-	    s << prefix.text_value if respond_to?(:prefix)
-	    s << term.toRuby
-	 end
   end
 
   def _nt_operation
@@ -1837,102 +1917,93 @@ module Pk2000
 
     i0 = index
     i1, s1 = index, []
-    r3 = _nt_prefix
-    if r3
-      r2 = r3
-    else
-      r2 = instantiate_node(SyntaxNode,input, index...index)
-    end
+    r2 = _nt_prefixedTerm
     s1 << r2
     if r2
-      r4 = _nt_term
-      s1 << r4
+      i3 = index
+      if input.index("+", index) == index
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("+")
+        r4 = nil
+      end
       if r4
-        i5 = index
-        if input.index("+", index) == index
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r3 = r4
+      else
+        if input.index("-", index) == index
+          r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
-          terminal_parse_failure("+")
-          r6 = nil
+          terminal_parse_failure("-")
+          r5 = nil
         end
-        if r6
-          r5 = r6
+        if r5
+          r3 = r5
         else
-          if input.index("-", index) == index
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          if input.index("*", index) == index
+            r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
             @index += 1
           else
-            terminal_parse_failure("-")
-            r7 = nil
+            terminal_parse_failure("*")
+            r6 = nil
           end
-          if r7
-            r5 = r7
+          if r6
+            r3 = r6
           else
-            if input.index("*", index) == index
-              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            if input.index("/", index) == index
+              r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
               @index += 1
             else
-              terminal_parse_failure("*")
-              r8 = nil
+              terminal_parse_failure("/")
+              r7 = nil
             end
-            if r8
-              r5 = r8
+            if r7
+              r3 = r7
             else
-              if input.index("/", index) == index
-                r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              if input.index("&", index) == index
+                r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
                 @index += 1
               else
-                terminal_parse_failure("/")
-                r9 = nil
+                terminal_parse_failure("&")
+                r8 = nil
               end
-              if r9
-                r5 = r9
+              if r8
+                r3 = r8
               else
-                if input.index("&", index) == index
-                  r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                if input.index("|", index) == index
+                  r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
                   @index += 1
                 else
-                  terminal_parse_failure("&")
-                  r10 = nil
+                  terminal_parse_failure("|")
+                  r9 = nil
                 end
-                if r10
-                  r5 = r10
+                if r9
+                  r3 = r9
                 else
-                  if input.index("|", index) == index
-                    r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  if input.index("~", index) == index
+                    r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
                     @index += 1
                   else
-                    terminal_parse_failure("|")
-                    r11 = nil
+                    terminal_parse_failure("~")
+                    r10 = nil
                   end
-                  if r11
-                    r5 = r11
+                  if r10
+                    r3 = r10
                   else
-                    if input.index("~", index) == index
-                      r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                      @index += 1
-                    else
-                      terminal_parse_failure("~")
-                      r12 = nil
-                    end
-                    if r12
-                      r5 = r12
-                    else
-                      self.index = i5
-                      r5 = nil
-                    end
+                    self.index = i3
+                    r3 = nil
                   end
                 end
               end
             end
           end
         end
-        s1 << r5
-        if r5
-          r13 = _nt_condition
-          s1 << r13
-        end
+      end
+      s1 << r3
+      if r3
+        r11 = _nt_condition
+        s1 << r11
       end
     end
     if s1.last
@@ -1945,28 +2016,9 @@ module Pk2000
     if r1
       r0 = r1
     else
-      i14, s14 = index, []
-      r16 = _nt_prefix
-      if r16
-        r15 = r16
-      else
-        r15 = instantiate_node(SyntaxNode,input, index...index)
-      end
-      s14 << r15
-      if r15
-        r17 = _nt_term
-        s14 << r17
-      end
-      if s14.last
-        r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
-        r14.extend(Operation1)
-        r14.extend(Operation2)
-      else
-        self.index = i14
-        r14 = nil
-      end
-      if r14
-        r0 = r14
+      r12 = _nt_prefixedTerm
+      if r12
+        r0 = r12
       else
         self.index = i0
         r0 = nil
@@ -2323,32 +2375,32 @@ module Pk2000
     end
 
     i0 = index
-    i1, s1 = index, []
-    r2 = _nt_number
-    s1 << r2
-    if r2
-      r3 = _nt_dot
-      s1 << r3
-      if r3
-        r4 = _nt_type
-        s1 << r4
-      end
-    end
-    if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
-      r1.extend(Type0)
-    else
-      self.index = i1
-      r1 = nil
-    end
+    r1 = _nt_simpleType
     if r1
       r0 = r1
     else
-      r5 = _nt_tupleType
-      if r5
-        r0 = r5
+      i2, s2 = index, []
+      r3 = _nt_number
+      s2 << r3
+      if r3
+        r4 = _nt_dot
+        s2 << r4
+        if r4
+          r5 = _nt_type
+          s2 << r5
+        end
+      end
+      if s2.last
+        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+        r2.extend(Type0)
       else
-        r6 = _nt_simpleType
+        self.index = i2
+        r2 = nil
+      end
+      if r2
+        r0 = r2
+      else
+        r6 = _nt_tupleType
         if r6
           r0 = r6
         else
