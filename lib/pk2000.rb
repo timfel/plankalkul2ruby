@@ -1375,50 +1375,73 @@ module Pk2000
     end
 
     i0 = index
-    i1, s1 = index, []
     if input.index("-", index) == index
-      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
       @index += 1
     else
       terminal_parse_failure("-")
-      r2 = nil
-    end
-    s1 << r2
-    if r2
-      i3 = index
-      if input.index(Regexp.new('[A-Z0-9]'), index) == index
-        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-        @index += 1
-      else
-        r4 = nil
-      end
-      if r4
-        self.index = i3
-        r3 = instantiate_node(SyntaxNode,input, index...index)
-      else
-        r3 = nil
-      end
-      s1 << r3
-    end
-    if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
-      r1.extend(Prefix0)
-    else
-      self.index = i1
       r1 = nil
     end
     if r1
       r0 = r1
     else
+      i2, s2 = index, []
       if input.index("!", index) == index
-        r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("!")
-        r5 = nil
+        r3 = nil
       end
-      if r5
-        r0 = r5
+      s2 << r3
+      if r3
+        i4 = index
+        i5 = index
+        if input.index(Regexp.new('[A-Z0-9]'), index) == index
+          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          r6 = nil
+        end
+        if r6
+          r5 = r6
+        else
+          if input.index("(", index) == index
+            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("(")
+            r7 = nil
+          end
+          if r7
+            r5 = r7
+          else
+            r8 = _nt_genericVariable
+            if r8
+              r5 = r8
+            else
+              self.index = i5
+              r5 = nil
+            end
+          end
+        end
+        if r5
+          self.index = i4
+          r4 = instantiate_node(SyntaxNode,input, index...index)
+        else
+          r4 = nil
+        end
+        s2 << r4
+      end
+      if s2.last
+        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+        r2.extend(Prefix0)
+      else
+        self.index = i2
+        r2 = nil
+      end
+      if r2
+        r0 = r2
       else
         self.index = i0
         r0 = nil

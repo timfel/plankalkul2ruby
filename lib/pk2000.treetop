@@ -83,7 +83,7 @@ grammar Pk2000
    end
 
    rule prefix
-      ("-" &[A-Z0-9]) / "!"
+      ("-" / "!" &([A-Z0-9] / "(" / genericVariable))
    end
 
    rule term
@@ -91,7 +91,7 @@ grammar Pk2000
    end 
 
    rule prefixedTerm
-      prefix term / term / "(" term2 ")"
+      prefix term / term / "(" term2 ")" 
    end
 
 
