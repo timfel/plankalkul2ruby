@@ -78,7 +78,7 @@ describe "Parser" do
    end
 
    it "understands prefix ! and -" do
-      eachNil? ["!1", "-1", "!V0[:0]"], false
+      eachNil? ["!1", "-0", "-i", "!i", "!V0[:0]", "!R3[:3.0]"], false
       eachNil? ["+1", "*1"], true
    end
 
