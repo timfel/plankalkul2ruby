@@ -51,24 +51,37 @@ class OptParse
    end
 end
 
+def getPk options
+   parser = Pk2000Parser.new
+   pkCode = File.open(options[:in]).read.gsub(" ", "").gsub("\n]", "]").gsub("[\n", "[").gsub("\n\n","\n")
+   pkCode.chop! if pkCode[-1] == "\n"
+   puts pkCode if options[:verbose]
+   pkCode
+end
+
+def mkRb pkCode, options
+   parser = Pk2000Parser.new
+   tree = parser.parse(pkCode)
+   rbCode = tree.toRuby
+   puts rbCode if options[:verbose]
+   rbCode
+end
+
+def writeOut rbCode, options
+   out = File.open(options[:out], 'w')
+   out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000core'\n\n"
+   out << rbCode
+   if options[:call]
+      out << "\n"
+      rbCode =~ /def (PK[0-9]*\(.*\))/
+      name = $1
+      name.gsub!(/v[0-9]/, "4")
+      out << "\nputs "+name+".to_i"
+   end
+   out.close
+end
+
 options = OptParse.parse(ARGV)
 puts options if options[:verbose]
-parser = Pk2000Parser.new
-pkCode = File.open(options[:in]).read.gsub(" ", "").gsub("\n]", "]").gsub("[\n", "[").gsub("\n\n","\n")
-pkCode.chop! if pkCode[-1] == "\n"
-puts pkCode if options[:verbose]
-tree = parser.parse(pkCode)
-rbCode = tree.toRuby
-puts rbCode if options[:verbose]
-out = File.open(options[:out], 'w')
-out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000core'\n"
-out << rbCode
-if options[:call]
-   out << "\n"
-   rbCode =~ /def (PK[0-9]*\(.*\))/
-   name = $1
-   name.gsub!(/v[0-9]/, "1")
-   out << "\nputs "+name+".to_i"
-end
-out.close
+writeOut(mkRb(getPk(options), options), options)
 
