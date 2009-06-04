@@ -153,13 +153,13 @@ end
 
 class PKCallNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      "break"
+      break
    end
 end
 
 class PKFinNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      "break"
+      s(:break)
    end
 end
 
@@ -198,21 +198,22 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
       end
    end
 
-   def varToRuby
-      components = text_value.split(/:|\[|\]/)
-      "PKVariable.instance("+components.to_s+")"
+   def varToRuby components=nil
+      components ||= text_value.split(/:|\[|\]/)
+      s(:call, s(:const, :PKVariable), :instance, 
+	s(:arglist, s(:array, components[0], 
+		     components[1], components[2])))
    end
 
    def tupleToRuby
-      s = ""
-      text_value.split(",").each do |input| 	 
+      sexp = s(:array)
+      text_value.split(",").each do |input|
 	 input =~ /(.*)\[(.*):(.*)\]/
-	 a = [$1, $2, $3]
-	 a.collect! { |x| x.gsub(/\(|\)/, "") }
-	 s << ("PKVariable.instance("+a.to_s+")")
-	 s << "," unless input == text_value.split(",").last
+	 c = [$1, $2, $3]
+	 c.collect! { |x| x.gsub(/\(|\)/, "") }
+	 sexp << varToRuby(c)
       end
-      s
+      s(:call, (:const, :PKTuple), :new, s(:arglist, sexp))
    end
 end
 
@@ -225,10 +226,10 @@ class PKIterativeNode < Treetop::Runtime::SyntaxNode
 end
 
 class PKOperationNode < Treetop::Runtime::SyntaxNode
-   @@replacers = {'=' => '==', '~' => '.equal?'}
+   @@replacers = {'=' => '=='}
    def toRuby
       operator = @@replacers[op.text_value] || op.text_value
-      s = " ("
+      sexp = s(:call)
       s << prefix.text_value if respond_to? :prefix
       s << prefixedTerm.toRuby << operator << condition.toRuby << ") "
    end
