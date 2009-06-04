@@ -238,7 +238,7 @@ class PKMethodNode < Treetop::Runtime::SyntaxNode
    def toRuby
       s = "def PK"+number.text_value+"("+randauszug.vTuple.toRuby+")\n"
       randauszug.vTuple.toRuby.split(",").each do |item|
-	 s << "PKVariable.define(['"+item+"', '', ':32.0'], "+item+")\n"
+	 s << "PKVariable.define(['"+item+"', '', '32.0'], "+item+")\n"
       end
       s << "\n" << lines.toRuby
       s << "\nreturn "+randauszug.rTuple.toRuby << "\nend"
