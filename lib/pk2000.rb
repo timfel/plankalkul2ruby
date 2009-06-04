@@ -979,7 +979,7 @@ module Pk2000
         end
         s7 << r8
         if r8
-          r9 = _nt_number
+          r9 = _nt_digits
           s7 << r9
           if r9
             if input.index("]", index) == index
@@ -2741,6 +2741,9 @@ module Pk2000
   end
 
   module Number0
+    def digits
+      elements[1]
+    end
   end
 
   def _nt_number
@@ -2760,21 +2763,7 @@ module Pk2000
     end
     s0 << r1
     if r1
-      s2, i2 = [], index
-      loop do
-        if input.index(Regexp.new('[0-9]'), index) == index
-          r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
-        else
-          r3 = nil
-        end
-        if r3
-          s2 << r3
-        else
-          break
-        end
-      end
-      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      r2 = _nt_digits
       s0 << r2
     end
     if s0.last
@@ -2786,6 +2775,35 @@ module Pk2000
     end
 
     node_cache[:number][start_index] = r0
+
+    return r0
+  end
+
+  def _nt_digits
+    start_index = index
+    if node_cache[:digits].has_key?(index)
+      cached = node_cache[:digits][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    s0, i0 = [], index
+    loop do
+      if input.index(Regexp.new('[0-9]'), index) == index
+        r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        r1 = nil
+      end
+      if r1
+        s0 << r1
+      else
+        break
+      end
+    end
+    r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+
+    node_cache[:digits][start_index] = r0
 
     return r0
   end

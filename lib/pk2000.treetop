@@ -51,7 +51,7 @@ grammar Pk2000
    end
 
    rule while
-      ("w" / "W") count:"1"? ("[" level:number "]")? fixed:("(" forTo:operation ")")? block <PKWhileNode>
+      ("w" / "W") count:"1"? ("[" level:digits "]")? fixed:("(" forTo:operation ")")? block <PKWhileNode>
    end
 
    rule block
@@ -158,6 +158,10 @@ grammar Pk2000
    end
 
    rule number
-      [1-9] [0-9]*
+      [1-9] digits
+   end
+
+   rule digits
+      [0-9]*
    end
 end
