@@ -15,7 +15,10 @@ grammar Pk2000
       / "(V0[:" type "],V1[:" type "],V2[:" type "])") {
 	 def toRuby
 	    # only need comma-delimited list of var-names
-	    text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase
+	    masgn = text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase.split(",")
+            sexp = s(:args)
+	    masgn.each { |arg| sexp << arg.to_sym }
+	    sexp
 	 end
       }
    end
@@ -37,7 +40,7 @@ grammar Pk2000
    rule assignment
       (from:term2 "=>" to:variable / from:tuple "=>" to:variable / from:tuple "=>" to:varTuple) {
          def toRuby
-            to.toRuby+" <= "+from.toRuby
+            s(:call, to.toRuby, :<=, s(:arglist, from.toRuby))
          end
       }
    end
@@ -45,7 +48,7 @@ grammar Pk2000
    rule ifThen
       term2 "->" statement {
          def toRuby
-            "if "+term2.toRuby+"\n"+statement.toRuby+"\nend"
+            s(:if, term2.toRuby, s(:block, statement.toRuby), nil)
          end
       }
    end
@@ -57,7 +60,7 @@ grammar Pk2000
    rule block
       "[" lines "]" {
          def toRuby
-            "{"+lines.toRuby+"}"
+            s(:block, lines.toRuby)
          end
       }
    end
@@ -77,7 +80,7 @@ grammar Pk2000
    rule count
       "N(" variable ")" {
 	 def toRuby
-	    variable.toRuby+".dimension"
+	    s(:call, variable.toRuby, :dimension, s(:arglist))
 	 end
       }
    end
