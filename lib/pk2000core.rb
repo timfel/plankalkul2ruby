@@ -96,9 +96,10 @@ class PKVariable
       else
 	 raise ArgumentError,"I am an INPUT-VARIABLE, I should never be written to!"
       end
+      self
    end
 
-   [:+, :-, :*, :/, :<, :>, :~].each do |item|
+   [:+, :-, :*, :/, :<, :>].each do |item|
       define_method(item) do |term|
 	 dimensionTest! term.dimension if term.class == self.class
 	 self.to_i.send(item, term.to_i % dimension ** 2)
