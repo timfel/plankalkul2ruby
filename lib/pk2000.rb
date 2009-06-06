@@ -2107,7 +2107,7 @@ module Pk2000
 
     i0 = index
     if input.index("0", index) == index
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      r1 = instantiate_node(PKNumberNode,input, index...(index + 1))
       @index += 1
     else
       terminal_parse_failure("0")

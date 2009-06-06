@@ -120,7 +120,8 @@ grammar Pk2000
    end
 
    rule constant
-      "0" / number / logConstant 
+      "0" <PKNumberNode>
+      / number / logConstant 
    end
 
    rule logConstant
