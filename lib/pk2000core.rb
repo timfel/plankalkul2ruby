@@ -226,9 +226,17 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
 end
 
 class PKIterativeNode < Treetop::Runtime::SyntaxNode
+end
+
+class PKLinesNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      sexp = first.toRuby
-      sexp << rest.next.toRuby unless rest.empty?
+      sexp = s(:block)
+      sexp << first.toRuby
+      unless rest.empty?
+	 rest.next.toRuby[1..-1].each do |item|
+	    sexp << item
+	 end
+      end
       sexp
    end
 end
