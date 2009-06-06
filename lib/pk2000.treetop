@@ -30,7 +30,7 @@ grammar Pk2000
    end
 
    rule lines
-      first:statement rest:("\n" next:lines)? <PKIterativeNode>
+      first:statement rest:("\n" next:lines)? <PKLinesNode>
    end
 
    rule statement
@@ -52,7 +52,11 @@ grammar Pk2000
          end
       }
       /
-      term2 "->" block
+      term2 "->" block {
+	 def toRuby
+	    s(:if, term2.toRuby, block.toRuby, nil)
+	 end
+      }
    end
 
    rule while
@@ -60,13 +64,13 @@ grammar Pk2000
    end
 
    rule conditionalLines
-      first:ifThen rest:("\n" next:conditionalLines)? <PKIterativeNode>
+      first:ifThen rest:("\n" next:conditionalLines)? <PKLinesNode>
    end
 
    rule block
       "[" lines "]" {
          def toRuby
-            s(:block, lines.toRuby)
+	    lines.toRuby
          end
       }
    end

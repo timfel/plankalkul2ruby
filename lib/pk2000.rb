@@ -599,7 +599,7 @@ module Pk2000
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
+      r0 = instantiate_node(PKLinesNode,input, i0...index, s0)
       r0.extend(Lines1)
     else
       self.index = i0
@@ -865,6 +865,12 @@ module Pk2000
     end
   end
 
+  module IfThen3
+	 def toRuby
+	    s(:if, term2.toRuby, block.toRuby, nil)
+	 end
+  end
+
   def _nt_ifThen
     start_index = index
     if node_cache[:ifThen].has_key?(index)
@@ -922,6 +928,7 @@ module Pk2000
       if s5.last
         r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
         r5.extend(IfThen2)
+        r5.extend(IfThen3)
       else
         self.index = i5
         r5 = nil
@@ -1187,7 +1194,7 @@ module Pk2000
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
+      r0 = instantiate_node(PKLinesNode,input, i0...index, s0)
       r0.extend(ConditionalLines1)
     else
       self.index = i0
@@ -1208,7 +1215,7 @@ module Pk2000
 
   module Block1
     def toRuby
-       s(:block, lines.toRuby)
+	    lines.toRuby
     end
   end
 
