@@ -51,10 +51,16 @@ grammar Pk2000
             s(:if, term2.toRuby, s(:block, statement.toRuby), nil)
          end
       }
+      /
+      term2 "->" block
    end
 
    rule while
-      ("w" / "W") count:"1"? ("[" level:digits "]")? fixed:("(" forTo:operation ")")? block <PKWhileNode>
+      ("w" / "W") count:"1"? ("[" level:digits "]")? fixed:("(" forTo:operation ")")? "[" conditionalLines "]" <PKWhileNode>
+   end
+
+   rule conditionalLines
+      first:ifThen rest:("\n" next:conditionalLines)? <PKIterativeNode>
    end
 
    rule block

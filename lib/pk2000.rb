@@ -855,6 +855,16 @@ module Pk2000
     end
   end
 
+  module IfThen2
+    def term2
+      elements[0]
+    end
+
+    def block
+      elements[2]
+    end
+  end
+
   def _nt_ifThen
     start_index = index
     if node_cache[:ifThen].has_key?(index)
@@ -863,30 +873,65 @@ module Pk2000
       return cached
     end
 
-    i0, s0 = index, []
-    r1 = _nt_term2
-    s0 << r1
-    if r1
+    i0 = index
+    i1, s1 = index, []
+    r2 = _nt_term2
+    s1 << r2
+    if r2
       if input.index("->", index) == index
-        r2 = instantiate_node(SyntaxNode,input, index...(index + 2))
+        r3 = instantiate_node(SyntaxNode,input, index...(index + 2))
         @index += 2
       else
         terminal_parse_failure("->")
-        r2 = nil
+        r3 = nil
       end
-      s0 << r2
-      if r2
-        r3 = _nt_statement
-        s0 << r3
+      s1 << r3
+      if r3
+        r4 = _nt_statement
+        s1 << r4
       end
     end
-    if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-      r0.extend(IfThen0)
-      r0.extend(IfThen1)
+    if s1.last
+      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1.extend(IfThen0)
+      r1.extend(IfThen1)
     else
-      self.index = i0
-      r0 = nil
+      self.index = i1
+      r1 = nil
+    end
+    if r1
+      r0 = r1
+    else
+      i5, s5 = index, []
+      r6 = _nt_term2
+      s5 << r6
+      if r6
+        if input.index("->", index) == index
+          r7 = instantiate_node(SyntaxNode,input, index...(index + 2))
+          @index += 2
+        else
+          terminal_parse_failure("->")
+          r7 = nil
+        end
+        s5 << r7
+        if r7
+          r8 = _nt_block
+          s5 << r8
+        end
+      end
+      if s5.last
+        r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+        r5.extend(IfThen2)
+      else
+        self.index = i5
+        r5 = nil
+      end
+      if r5
+        r0 = r5
+      else
+        self.index = i0
+        r0 = nil
+      end
     end
 
     node_cache[:ifThen][start_index] = r0
@@ -917,9 +962,10 @@ module Pk2000
       elements[3]
     end
 
-    def block
-      elements[4]
+    def conditionalLines
+      elements[5]
     end
+
   end
 
   def _nt_while
@@ -1046,8 +1092,28 @@ module Pk2000
           end
           s0 << r11
           if r11
-            r16 = _nt_block
+            if input.index("[", index) == index
+              r16 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure("[")
+              r16 = nil
+            end
             s0 << r16
+            if r16
+              r17 = _nt_conditionalLines
+              s0 << r17
+              if r17
+                if input.index("]", index) == index
+                  r18 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  @index += 1
+                else
+                  terminal_parse_failure("]")
+                  r18 = nil
+                end
+                s0 << r18
+              end
+            end
           end
         end
       end
@@ -1061,6 +1127,74 @@ module Pk2000
     end
 
     node_cache[:while][start_index] = r0
+
+    return r0
+  end
+
+  module ConditionalLines0
+    def next
+      elements[1]
+    end
+  end
+
+  module ConditionalLines1
+    def first
+      elements[0]
+    end
+
+    def rest
+      elements[1]
+    end
+  end
+
+  def _nt_conditionalLines
+    start_index = index
+    if node_cache[:conditionalLines].has_key?(index)
+      cached = node_cache[:conditionalLines][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_ifThen
+    s0 << r1
+    if r1
+      i3, s3 = index, []
+      if input.index("\n", index) == index
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("\n")
+        r4 = nil
+      end
+      s3 << r4
+      if r4
+        r5 = _nt_conditionalLines
+        s3 << r5
+      end
+      if s3.last
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        r3.extend(ConditionalLines0)
+      else
+        self.index = i3
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
+      r0.extend(ConditionalLines1)
+    else
+      self.index = i0
+      r0 = nil
+    end
+
+    node_cache[:conditionalLines][start_index] = r0
 
     return r0
   end
