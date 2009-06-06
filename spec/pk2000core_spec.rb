@@ -245,9 +245,11 @@ describe "Compiler" do
       compile("[5+2\n8+2]", Fixnum).should == 10
    end
 
-   it "compiles conditionals" do
+   it "compiles ifThens" do
       compile("1->5", Fixnum)
       compile("1->5")[0].should == :if
+      compile("1->[1+2\n5]", Fixnum)
+      compile("1->[1+2\n5]")[0].should == :if
    end
 
    it "compiles loops" do
