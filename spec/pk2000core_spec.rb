@@ -262,6 +262,10 @@ describe "Compiler" do
    end
 
    it "compiles functions" do
-      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")
+      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")[0].should == :defs
+      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")[1][1].should == :Plankalkuel
+      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")[2].should == :p815
+      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")[3][1].should == :v0
+      compile("P815(V0[:8.0])=>(R0[:8.0])\nFIN\nEND")[4][0] == :scope
    end
 end
