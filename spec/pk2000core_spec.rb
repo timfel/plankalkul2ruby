@@ -189,8 +189,8 @@ describe "Compiler" do
    end
 
    it "compiles generic variables" do
-      compile("i1")[2].should == :i1
-      compile("i")[2].should == :i
+      compile("i1")[1][2].should == :i1
+      compile("i")[1][2].should == :i
    end
 
    it "compiles logic constants" do
@@ -231,13 +231,13 @@ describe "Compiler" do
 
    it "compiles function-calls" do
       pending
-      compile("R0815[1:0](1)")[0].should == :call
-      compile("R0815[1:0](1)")[1].should == :PK0815
+      compile("R0815[1:0](1)")[1][0].should == :call
+      compile("R0815[1:0](1)")[1][1].should == :PK0815
    end
 
    it "compiles FIN statements" do
-      compile("FIN")[0].should == :break
-      compile("FIN2")[0].should == :break
+      compile("FIN")[1][0].should == :break
+      compile("FIN2")[1][0].should == :break
    end
 
    it "compiles blocks" do
@@ -247,9 +247,9 @@ describe "Compiler" do
 
    it "compiles ifThens" do
       compile("1->5", Fixnum)
-      compile("1->5")[0].should == :if
+      compile("1->5")[1][0].should == :if
       compile("1->[1+2\n5]", Fixnum)
-      compile("1->[1+2\n5]")[0].should == :if
+      compile("1->[1+2\n5]")[1][0].should == :if
    end
 
    it "compiles loops" do
