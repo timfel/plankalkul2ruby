@@ -178,7 +178,10 @@ module Pk2000
   module VTuple3
 	 def toRuby
 	    # only need comma-delimited list of var-names
-	    text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase
+	    masgn = text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase.split(",")
+    sexp = s(:args)
+	    masgn.each { |arg| sexp << arg.to_sym }
+	    sexp
 	 end
   end
 
@@ -728,7 +731,7 @@ module Pk2000
 
   module Assignment3
     def toRuby
-       to.toRuby+" <= "+from.toRuby
+       s(:call, to.toRuby, :<=, s(:arglist, from.toRuby))
     end
   end
 
@@ -848,7 +851,7 @@ module Pk2000
 
   module IfThen1
     def toRuby
-       "if "+term2.toRuby+"\n"+statement.toRuby+"\nend"
+       s(:if, term2.toRuby, s(:block, statement.toRuby), nil)
     end
   end
 
@@ -1071,7 +1074,7 @@ module Pk2000
 
   module Block1
     def toRuby
-       "{"+lines.toRuby+"}"
+       s(:block, lines.toRuby)
     end
   end
 
@@ -1355,7 +1358,7 @@ module Pk2000
 
   module Count1
 	 def toRuby
-	    variable.toRuby+".dimension"
+	    s(:call, variable.toRuby, :dimension, s(:arglist))
 	 end
   end
 
@@ -2404,7 +2407,7 @@ module Pk2000
     end
 
     if input.index("0", index) == index
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      r0 = instantiate_node(PKNumberNode,input, index...(index + 1))
       @index += 1
     else
       terminal_parse_failure("0")
@@ -2711,7 +2714,7 @@ module Pk2000
       s1 << r3
     end
     if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1 = instantiate_node(PKGenericVariableNode,input, i1...index, s1)
       r1.extend(GenericVariable0)
     else
       self.index = i1
@@ -2721,7 +2724,7 @@ module Pk2000
       r0 = r1
     else
       if input.index("i", index) == index
-        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r4 = instantiate_node(PKGenericVariableNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("i")
@@ -2767,7 +2770,7 @@ module Pk2000
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PKNumberNode,input, i0...index, s0)
       r0.extend(Number0)
     else
       self.index = i0
@@ -2801,7 +2804,7 @@ module Pk2000
         break
       end
     end
-    r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+    r0 = instantiate_node(PKNumberNode,input, i0...index, s0)
 
     node_cache[:digits][start_index] = r0
 

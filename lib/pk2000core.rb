@@ -143,17 +143,24 @@ end
 
 class Treetop::Runtime::SyntaxNode
    def toRuby
-      text_value
    end
+end
 
-   def toC
-      text_value
+class PKNumberNode < Treetop::Runtime::SyntaxNode
+   def toRuby
+      s(:lit, text_value.to_i)
+   end
+end
+
+class PKGenericVariableNode < Treetop::Runtime::SyntaxNode
+   def toRuby
+      s(:call, nil, text_value.to_sym, s(:arglist))
    end
 end
 
 class PKCallNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      break
+      text_value
    end
 end
 
@@ -201,8 +208,8 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
    def varToRuby components=nil
       components ||= text_value.split(/:|\[|\]/)
       s(:call, s(:const, :PKVariable), :instance, 
-	s(:arglist, s(:array, components[0], 
-		     components[1], components[2])))
+	s(:arglist, s(:array, s(:lit, components[0]), 
+		     s(:lit, components[1]), s(:lit, components[2]))))
    end
 
    def tupleToRuby
@@ -219,9 +226,9 @@ end
 
 class PKIterativeNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      s = first.toRuby+"\n"
-      s << rest.next.toRuby unless rest.empty?
-      s
+      sexp = first.toRuby
+      sexp << rest.next.toRuby unless rest.empty?
+      sexp
    end
 end
 
@@ -230,8 +237,9 @@ class PKOperationNode < Treetop::Runtime::SyntaxNode
    def toRuby
       operator = @@replacers[op.text_value] || op.text_value
       sexp = s(:call)
-      s << prefix.text_value if respond_to? :prefix
-      s << prefixedTerm.toRuby << operator << condition.toRuby << ") "
+      sexp << prefix.text_value if respond_to? :prefix
+      sexp << prefixedTerm.toRuby << operator.to_sym << condition.toRuby
+      sexp
    end
 end
 

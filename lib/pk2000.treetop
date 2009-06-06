@@ -140,7 +140,7 @@ grammar Pk2000
    end
 
    rule simpleType
-      "0"
+      "0" <PKNumberNode>
    end
 
    rule type
@@ -156,15 +156,15 @@ grammar Pk2000
    end
 
    rule genericVariable
-      "i" number
-      / "i"
+      "i" number <PKGenericVariableNode>
+      / "i" <PKGenericVariableNode>
    end
 
    rule number
-      [1-9] digits
+      [1-9] digits <PKNumberNode>
    end
 
    rule digits
-      [0-9]*
+      [0-9]* <PKNumberNode>
    end
 end
