@@ -7,6 +7,7 @@ w1(5)[5+6]
 w1[7+8]
 END"
 
+require 'sexp_stuff'
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), "lib")
 require 'pk2000core'
 PARSER  = Pk2000Parser.new
