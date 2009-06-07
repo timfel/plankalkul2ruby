@@ -3,6 +3,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), "lib")
 
 require 'pk2000core'
 require 'optparse'
+require 'ruby2ruby'
 require 'pp'
 
 class OptParse
@@ -62,21 +63,21 @@ end
 def mkRb pkCode, options
    parser = Pk2000Parser.new
    tree = parser.parse(pkCode)
-   rbCode = tree.toRuby
+   rbCode = Ruby2Ruby.new.process(tree.toRuby)
    puts rbCode if options[:verbose]
    rbCode
 end
 
 def writeOut rbCode, options
    out = File.open(options[:out], 'w')
-   out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000core'\n\n"
+   out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000runtime'\n\ninclude Plankalkuel\n\n"
    out << rbCode
    if options[:call]
       out << "\n"
-      rbCode =~ /def (PK[0-9]*\(.*\))/
+      rbCode =~ /def .*(p[0-9]*\(.*\))/
       name = $1
       name.gsub!(/v[0-9]/, "4")
-      out << "\nputs "+name+".to_i"
+      out << "\nputs Plankalkuel."+name+".to_i\n"
    end
    out.close
 end
