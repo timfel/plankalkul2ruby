@@ -1379,13 +1379,18 @@ module Pk2000
       elements[1]
     end
 
+    def comp
+      elements[3]
+    end
+
     def type
       elements[5]
     end
 
     def argumentTuple
-      elements[7]
+      elements[8]
     end
+
   end
 
   def _nt_call
@@ -1457,17 +1462,37 @@ module Pk2000
               r8 = _nt_type
               s0 << r8
               if r8
-                if input.index("])", index) == index
-                  r9 = instantiate_node(SyntaxNode,input, index...(index + 2))
-                  @index += 2
+                if input.index("]", index) == index
+                  r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  @index += 1
                 else
-                  terminal_parse_failure("])")
+                  terminal_parse_failure("]")
                   r9 = nil
                 end
                 s0 << r9
                 if r9
-                  r10 = _nt_argumentTuple
+                  if input.index("(", index) == index
+                    r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                    @index += 1
+                  else
+                    terminal_parse_failure("(")
+                    r10 = nil
+                  end
                   s0 << r10
+                  if r10
+                    r11 = _nt_argumentTuple
+                    s0 << r11
+                    if r11
+                      if input.index(")", index) == index
+                        r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                        @index += 1
+                      else
+                        terminal_parse_failure(")")
+                        r12 = nil
+                      end
+                      s0 << r12
+                    end
+                  end
                 end
               end
             end
@@ -1500,13 +1525,12 @@ module Pk2000
 
   module ArgumentTuple1
     def first
-      elements[1]
+      elements[0]
     end
 
     def rest
-      elements[2]
+      elements[1]
     end
-
   end
 
   def _nt_argumentTuple
@@ -1518,53 +1542,29 @@ module Pk2000
     end
 
     i0, s0 = index, []
-    if input.index("(", index) == index
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
-    else
-      terminal_parse_failure("(")
-      r1 = nil
-    end
+    r1 = _nt_term2
     s0 << r1
     if r1
-      r2 = _nt_term2
-      s0 << r2
-      if r2
-        s3, i3 = [], index
-        loop do
-          i4, s4 = index, []
-          r5 = _nt_comma
-          s4 << r5
-          if r5
-            r6 = _nt_term2
-            s4 << r6
-          end
-          if s4.last
-            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-            r4.extend(ArgumentTuple0)
-          else
-            self.index = i4
-            r4 = nil
-          end
-          if r4
-            s3 << r4
-          else
-            break
-          end
-        end
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        s0 << r3
-        if r3
-          if input.index(")", index) == index
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
-          else
-            terminal_parse_failure(")")
-            r7 = nil
-          end
-          s0 << r7
-        end
+      i3, s3 = index, []
+      r4 = _nt_comma
+      s3 << r4
+      if r4
+        r5 = _nt_argumentTuple
+        s3 << r5
       end
+      if s3.last
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        r3.extend(ArgumentTuple0)
+      else
+        self.index = i3
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r2
     end
     if s0.last
       r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
