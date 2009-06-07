@@ -361,13 +361,20 @@ module Pk2000
       elements[1]
     end
 
+  end
+
+  module RTuple2
+    def type
+      elements[1]
+    end
+
     def type
       elements[3]
     end
 
   end
 
-  module RTuple2
+  module RTuple3
     def type
       elements[1]
     end
@@ -392,11 +399,11 @@ module Pk2000
 
     i0 = index
     i1, s1 = index, []
-    if input.index("(R0[:", index) == index
-      r2 = instantiate_node(SyntaxNode,input, index...(index + 5))
-      @index += 5
+    if input.index("R0[:", index) == index
+      r2 = instantiate_node(SyntaxNode,input, index...(index + 4))
+      @index += 4
     else
-      terminal_parse_failure("(R0[:")
+      terminal_parse_failure("R0[:")
       r2 = nil
     end
     s1 << r2
@@ -404,11 +411,11 @@ module Pk2000
       r3 = _nt_type
       s1 << r3
       if r3
-        if input.index("])", index) == index
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 2))
-          @index += 2
+        if input.index("]", index) == index
+          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
         else
-          terminal_parse_failure("])")
+          terminal_parse_failure("]")
           r4 = nil
         end
         s1 << r4
@@ -437,28 +444,14 @@ module Pk2000
         r7 = _nt_type
         s5 << r7
         if r7
-          if input.index("],R1[:", index) == index
-            r8 = instantiate_node(SyntaxNode,input, index...(index + 6))
-            @index += 6
+          if input.index("])", index) == index
+            r8 = instantiate_node(SyntaxNode,input, index...(index + 2))
+            @index += 2
           else
-            terminal_parse_failure("],R1[:")
+            terminal_parse_failure("])")
             r8 = nil
           end
           s5 << r8
-          if r8
-            r9 = _nt_type
-            s5 << r9
-            if r9
-              if input.index("])", index) == index
-                r10 = instantiate_node(SyntaxNode,input, index...(index + 2))
-                @index += 2
-              else
-                terminal_parse_failure("])")
-                r10 = nil
-              end
-              s5 << r10
-            end
-          end
         end
       end
       if s5.last
@@ -471,69 +464,117 @@ module Pk2000
       if r5
         r0 = r5
       else
-        i11, s11 = index, []
+        i9, s9 = index, []
         if input.index("(R0[:", index) == index
-          r12 = instantiate_node(SyntaxNode,input, index...(index + 5))
+          r10 = instantiate_node(SyntaxNode,input, index...(index + 5))
           @index += 5
         else
           terminal_parse_failure("(R0[:")
-          r12 = nil
+          r10 = nil
         end
-        s11 << r12
-        if r12
-          r13 = _nt_type
-          s11 << r13
-          if r13
+        s9 << r10
+        if r10
+          r11 = _nt_type
+          s9 << r11
+          if r11
             if input.index("],R1[:", index) == index
-              r14 = instantiate_node(SyntaxNode,input, index...(index + 6))
+              r12 = instantiate_node(SyntaxNode,input, index...(index + 6))
               @index += 6
             else
               terminal_parse_failure("],R1[:")
-              r14 = nil
+              r12 = nil
             end
-            s11 << r14
-            if r14
-              r15 = _nt_type
-              s11 << r15
-              if r15
-                if input.index("],R2[:", index) == index
-                  r16 = instantiate_node(SyntaxNode,input, index...(index + 6))
-                  @index += 6
+            s9 << r12
+            if r12
+              r13 = _nt_type
+              s9 << r13
+              if r13
+                if input.index("])", index) == index
+                  r14 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                  @index += 2
                 else
-                  terminal_parse_failure("],R2[:")
-                  r16 = nil
+                  terminal_parse_failure("])")
+                  r14 = nil
                 end
-                s11 << r16
-                if r16
-                  r17 = _nt_type
-                  s11 << r17
-                  if r17
-                    if input.index("])", index) == index
-                      r18 = instantiate_node(SyntaxNode,input, index...(index + 2))
-                      @index += 2
-                    else
-                      terminal_parse_failure("])")
-                      r18 = nil
+                s9 << r14
+              end
+            end
+          end
+        end
+        if s9.last
+          r9 = instantiate_node(PKVariableNode,input, i9...index, s9)
+          r9.extend(RTuple2)
+        else
+          self.index = i9
+          r9 = nil
+        end
+        if r9
+          r0 = r9
+        else
+          i15, s15 = index, []
+          if input.index("(R0[:", index) == index
+            r16 = instantiate_node(SyntaxNode,input, index...(index + 5))
+            @index += 5
+          else
+            terminal_parse_failure("(R0[:")
+            r16 = nil
+          end
+          s15 << r16
+          if r16
+            r17 = _nt_type
+            s15 << r17
+            if r17
+              if input.index("],R1[:", index) == index
+                r18 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                @index += 6
+              else
+                terminal_parse_failure("],R1[:")
+                r18 = nil
+              end
+              s15 << r18
+              if r18
+                r19 = _nt_type
+                s15 << r19
+                if r19
+                  if input.index("],R2[:", index) == index
+                    r20 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                    @index += 6
+                  else
+                    terminal_parse_failure("],R2[:")
+                    r20 = nil
+                  end
+                  s15 << r20
+                  if r20
+                    r21 = _nt_type
+                    s15 << r21
+                    if r21
+                      if input.index("])", index) == index
+                        r22 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                        @index += 2
+                      else
+                        terminal_parse_failure("])")
+                        r22 = nil
+                      end
+                      s15 << r22
                     end
-                    s11 << r18
                   end
                 end
               end
             end
           end
-        end
-        if s11.last
-          r11 = instantiate_node(PKVariableNode,input, i11...index, s11)
-          r11.extend(RTuple2)
-        else
-          self.index = i11
-          r11 = nil
-        end
-        if r11
-          r0 = r11
-        else
-          self.index = i0
-          r0 = nil
+          if s15.last
+            r15 = instantiate_node(PKVariableNode,input, i15...index, s15)
+            r15.extend(RTuple3)
+          else
+            self.index = i15
+            r15 = nil
+          end
+          if r15
+            r0 = r15
+          else
+            self.index = i0
+            r0 = nil
+          end
         end
       end
     end
@@ -1334,24 +1375,17 @@ module Pk2000
   end
 
   module Call0
-    def comma
-      elements[0]
-    end
-
-    def term2
+    def number
       elements[1]
     end
-  end
 
-  module Call1
     def type
       elements[5]
     end
 
-    def term2
+    def argumentTuple
       elements[7]
     end
-
   end
 
   def _nt_call
@@ -1423,53 +1457,17 @@ module Pk2000
               r8 = _nt_type
               s0 << r8
               if r8
-                if input.index("](", index) == index
+                if input.index("])", index) == index
                   r9 = instantiate_node(SyntaxNode,input, index...(index + 2))
                   @index += 2
                 else
-                  terminal_parse_failure("](")
+                  terminal_parse_failure("])")
                   r9 = nil
                 end
                 s0 << r9
                 if r9
-                  r10 = _nt_term2
+                  r10 = _nt_argumentTuple
                   s0 << r10
-                  if r10
-                    s11, i11 = [], index
-                    loop do
-                      i12, s12 = index, []
-                      r13 = _nt_comma
-                      s12 << r13
-                      if r13
-                        r14 = _nt_term2
-                        s12 << r14
-                      end
-                      if s12.last
-                        r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
-                        r12.extend(Call0)
-                      else
-                        self.index = i12
-                        r12 = nil
-                      end
-                      if r12
-                        s11 << r12
-                      else
-                        break
-                      end
-                    end
-                    r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
-                    s0 << r11
-                    if r11
-                      if input.index(")", index) == index
-                        r15 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                        @index += 1
-                      else
-                        terminal_parse_failure(")")
-                        r15 = nil
-                      end
-                      s0 << r15
-                    end
-                  end
                 end
               end
             end
@@ -1479,13 +1477,104 @@ module Pk2000
     end
     if s0.last
       r0 = instantiate_node(PKCallNode,input, i0...index, s0)
-      r0.extend(Call1)
+      r0.extend(Call0)
     else
       self.index = i0
       r0 = nil
     end
 
     node_cache[:call][start_index] = r0
+
+    return r0
+  end
+
+  module ArgumentTuple0
+    def comma
+      elements[0]
+    end
+
+    def next
+      elements[1]
+    end
+  end
+
+  module ArgumentTuple1
+    def first
+      elements[1]
+    end
+
+    def rest
+      elements[2]
+    end
+
+  end
+
+  def _nt_argumentTuple
+    start_index = index
+    if node_cache[:argumentTuple].has_key?(index)
+      cached = node_cache[:argumentTuple][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    if input.index("(", index) == index
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure("(")
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      r2 = _nt_term2
+      s0 << r2
+      if r2
+        s3, i3 = [], index
+        loop do
+          i4, s4 = index, []
+          r5 = _nt_comma
+          s4 << r5
+          if r5
+            r6 = _nt_term2
+            s4 << r6
+          end
+          if s4.last
+            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+            r4.extend(ArgumentTuple0)
+          else
+            self.index = i4
+            r4 = nil
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
+        end
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        s0 << r3
+        if r3
+          if input.index(")", index) == index
+            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure(")")
+            r7 = nil
+          end
+          s0 << r7
+        end
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(PKIterativeNode,input, i0...index, s0)
+      r0.extend(ArgumentTuple1)
+    else
+      self.index = i0
+      r0 = nil
+    end
+
+    node_cache[:argumentTuple][start_index] = r0
 
     return r0
   end

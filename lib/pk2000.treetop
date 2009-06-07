@@ -24,7 +24,8 @@ grammar Pk2000
    end
 
    rule rTuple
-      "(R0[:" type "])" <PKVariableNode>
+      "R0[:" type "]" <PKVariableNode>
+      / "(R0[:" type "])" <PKVariableNode>
       / "(R0[:" type "],R1[:" type "])" <PKVariableNode>
       / "(R0[:" type "],R1[:" type "],R2[:" type "])" <PKVariableNode>
    end
@@ -84,7 +85,11 @@ grammar Pk2000
    end
 
    rule call
-      "R" [0-9]+ "[" component? ":" type "](" term2 (comma term2)* ")" <PKCallNode>
+      "R" number:[0-9]+ "[" component? ":" type "])" argumentTuple <PKCallNode>
+   end
+
+   rule argumentTuple
+      "(" first:term2 rest:(comma next:term2)* ")" <PKIterativeNode>
    end
 
    rule count
@@ -106,7 +111,6 @@ grammar Pk2000
    rule prefixedTerm
       prefix term / term / "(" term2 ")" 
    end
-
 
    rule tuple
       varTuple
