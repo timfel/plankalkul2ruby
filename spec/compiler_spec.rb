@@ -82,9 +82,9 @@ describe "Compiler" do
    end
 
    it "compiles function-calls" do
-      pending
-      compile("R0815[1:0](1)")[1][0].should == :call
-      compile("R0815[1:0](1)")[1][1].should == :PK0815
+      compile("R0815[:0](1)")[1][0].should == :call
+      compile("R0815[:0](1)")[1][2].should == :p0815
+      compile("R0815[1:0](1)")[1][1][2].should == :p0815
    end
 
    it "compiles FIN statements" do
