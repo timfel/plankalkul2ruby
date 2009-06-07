@@ -20,7 +20,13 @@ end
 
 class PKCallNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      text_value
+      sexp = s(:call, s(:const, :Plankalkuel), 
+	       ("p"+number.text_value).to_sym, s(:arglist, argumentTuple.toRuby)
+      if respond_to? :component && not component.text_value.nil?
+	 return s(:call, sexp, :component, s(:arglist, component.text_value, type.text_value))
+      else
+	 return sexp
+      end
    end
 end
 
@@ -116,6 +122,7 @@ class PKMethodNode < Treetop::Runtime::SyntaxNode
       sexp = s(:defs, s(:const, :Plankalkuel), ("p"+number.text_value).to_sym)
       sexp << randauszug.vTuple.toRuby
       block = s(:block)
+      block << s(:call, s(:const, :PKVariable), :enterScope, s(:arglist))
       arguments = randauszug.vTuple.text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase
       arguments.split(",").each do |item|
 	 block << s(:call, s(:const, :PKVariable), 
@@ -123,7 +130,9 @@ class PKMethodNode < Treetop::Runtime::SyntaxNode
 			      s(:lvar, item.to_sym)))
       end
       block << lines.toRuby
-      block << s(:return, randauszug.rTuple.toRuby)
+      block << s(:lasgn, :retVal, randauszug.rTuple.toRuby)
+      block << s(:call, s(:const, :PKVariable), :leaveScope, s(:arglist))
+      block << s(:return, s(:lvar, :retVal))
       sexp << s(:scope, block)
    end
 end

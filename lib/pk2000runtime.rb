@@ -3,16 +3,28 @@ module Plankalkuel
    end
 
    class PKVariable
-      @@instances = {}
+      @@instances = [{}]
 
       def self.define array, int
 	 instance(array).tap { |i| i.assignInt(int) }
       end
 
       def self.instance array
-	 i = (@@instances[array.first.upcase.to_sym] || self.new(array))
+	 i = (instances[array.first.upcase.to_sym] || self.new(array))
 	 i.component(array[1],array.last)
 	 return i
+      end
+
+      def self.instances 
+	@@instances.last
+      end
+
+      def self.enterScope
+	 @@instances << {}
+      end
+      
+      def self.leaveScope
+	 @@instances.pop
       end
 
       def method_missing(meth, *args, &block)
@@ -20,7 +32,7 @@ module Plankalkuel
       end
 
       def self.resetVariableSpace
-	 @@instances = {}
+	 @@instances = [{}]
       end
 
       def coerce other
@@ -38,11 +50,12 @@ module Plankalkuel
 	 end
 	 @array = Array.new(size,0)
 	 @workingBounds = 0..(@array.size-1)
-	 self.component(array[1],array.last)
-	 @@instances[@name.to_sym] = self
+	 component(array[1],array.last)
+	 self.class.instances[@name.to_sym] = self
       end
 
       def strToComp str
+	 return [str] if str.is_a? Fixnum
 	 str.split(".").collect {|item| item.to_i}
       end
 
@@ -50,7 +63,7 @@ module Plankalkuel
 	 @workingBounds = 0..(@array.size-1)
 	 comp = strToComp compString
 	 begin
-	    unless (comp.empty? ||	!typeSafe?(type,comp.size))
+	    unless (comp.empty? || !typeSafe?(type,comp.size))
 	       comp.each_with_index do |item,i|
 		  raise if item > @type[i]
 		  sliceSize = @workingBounds.to_a.size / @type[i]
@@ -59,13 +72,17 @@ module Plankalkuel
 	       end
 	    end
 	 rescue Exception
-	    raise ArgumentError,("The variable "+@name+" has been previously referenced with type "+@type.to_s+", however, I now got "+compString)
+	    raise ArgumentError,("The variable "+@name.to_s+" has been previously
+				 referenced with type "+@type.to_s+", however, 
+				 I now got "+compString.to_s)
 	 end
+	 self
       end
 
       def typeSafe? type,depth
 	 unless @type[depth..-1] == strToComp(type)
-	    raise ArgumentError,("Not of same type: Expected "+@type[depth..-1].to_s+", got "+type) 
+	    raise ArgumentError,("Not of same type: Expected "
+				 +@type[depth..-1].to_s+", got "+type.to_s) 
 	 else
 	    true
 	 end
