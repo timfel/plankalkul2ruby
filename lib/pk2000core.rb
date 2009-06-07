@@ -21,12 +21,12 @@ end
 class PKCallNode < Treetop::Runtime::SyntaxNode
    def toRuby
       sexp = s(:call, s(:const, :Plankalkuel), 
-	       ("p"+number.text_value).to_sym, s(:arglist, argumentTuple.toRuby)
-      if respond_to? :component && not component.text_value.nil?
-	 return s(:call, sexp, :component, s(:arglist, component.text_value, type.text_value))
-      else
-	 return sexp
+	       ("p"+number.text_value).to_sym, argumentTuple.toRuby)
+      unless comp.empty?
+	 return s(:call, sexp, :component, 
+		  s(:arglist, s(:str, comp.text_value), s(:str, type.text_value)))
       end
+      sexp
    end
 end
 
@@ -91,18 +91,26 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
 end
 
 class PKIterativeNode < Treetop::Runtime::SyntaxNode
-end
-
-class PKLinesNode < Treetop::Runtime::SyntaxNode
-   def toRuby
-      sexp = s(:block)
+   def flatten_tree_on sexp
       sexp << first.toRuby
-      unless rest.empty?
+      if rest.respond_to? :next
 	 rest.next.toRuby[1..-1].each do |item|
 	    sexp << item
 	 end
       end
       sexp
+   end
+
+   def toRuby
+      sexp = s(:arglist)
+      flatten_tree_on sexp
+   end
+end
+
+class PKLinesNode < PKIterativeNode
+   def toRuby
+      sexp = s(:block)
+      flatten_tree_on sexp
    end
 end
 
