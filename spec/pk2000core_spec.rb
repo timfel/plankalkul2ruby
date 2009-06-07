@@ -1,6 +1,9 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'pk2000core'
+require 'pk2000runtime'
 require 'ruby2ruby'
+
+include Plankalkuel
 
 describe PKVariable do 
    before do 
@@ -43,6 +46,7 @@ describe PKVariable do
       # einmal für zuweisung im wertebereich
       v4_1 <= 4
       (v4_1 == 4).should == true
+      v4_1.to_i.should == 4
       # einmal für zuweisung oberhalb des wertebereiches
       v4_1 <= 128
       (v4_1 == 128).should == true
