@@ -32,7 +32,9 @@ describe "Compiler" do
 
    it "compiles prefixes" do
       compile("!1", FalseClass)
+      compile("!(1+1)", FalseClass)
       compile("-1", Fixnum).should == -1
+      compile("-(1+1)", Fixnum).should == -2
    end
 
    it "compiles generic variables" do
