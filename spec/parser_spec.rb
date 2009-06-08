@@ -55,7 +55,7 @@ describe "Parser" do
    end
 
    it "loops endlessly whenever I call" do
-      eachNil? ["w1(V0[:0]-1)[1=1->1+2]", "w[1->3+4]", "w1(5)[5>2->5+6]", "W1[0->7+8]"], false
+      eachNil? ["w1(V0[:0]-1)[1=1->1+2]", "w[1->3+4]", "w1(5)[5>2\n5+6]", "W1[0->7+8]"], false
       eachNil? ["w2[3+4]", "w[3+4]"], true
    end
 
