@@ -54,8 +54,10 @@ end
 
 def getPk options
    parser = Pk2000Parser.new
-   pkCode = File.open(options[:in]).read.gsub(" ", "").gsub("\n]", "]").gsub("[\n", "[").gsub("\n\n","\n")
-   pkCode.chop! if pkCode[-1] == "\n"
+   pkCode = File.open(options[:in]).read.
+      gsub(" ", "").gsub("\n]", "]").
+      gsub("[\n", "[").gsub(/^\n$/, "").
+      gsub("END\n", "END")
    puts pkCode if options[:verbose]
    pkCode
 end
