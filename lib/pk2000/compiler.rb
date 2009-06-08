@@ -33,29 +33,48 @@ class PKFinNode < Treetop::Runtime::SyntaxNode
    end
 end
 
-class PKWhileNode < Treetop::Runtime::SyntaxNode
-   def forToGet
-      return fixed.forTo if fixed.respond_to? :forTo
-      return nil
-   end
-   def toRubyFor
-      s = "("+forToGet.toRuby+").times do " 
-      s << " |i|" if count
-      s << " \n ("
-   end
-   def toRubyWhile
-      s = "i = 0\nflag=true\n" if count.text_value == "1"
-      s = "flag=true\n" if s.nil?
-      s << " while(flag) do flag = (\n"
-   end
+class PKForNode < Treetop::Runtime::SyntaxNode
    def toRuby
-      if forToGet
-	 s = toRubyFor
+      sexp = s(:iter, s(:call, forTo.toRuby, :times, s(:arglist)))
+      if !count.text_value.empty?
+	 i = "i"
+	 i = "i"+lvl.level.toRuby if lvl.respond_to? :level
+	 sexp << s(:lasgn, i.to_sym) 
       else
-	 s = toRubyWhile
+	 sexp << nil
       end
-      s << "Proc.new "+block.toRuby+".call"
-      s << "\n) \nend"
+      sexp << block.toRuby
+   end
+end
+
+class PKWhileNode < Treetop::Runtime::SyntaxNode
+   def toRuby
+      runI = !count.text_value.empty?
+      if runI
+	 i = "i"
+	 i = "i"+lvl.level.toRuby if lvl.respond_to? :level
+	 sexp = s(:block, s(:lasgn, i.to_sym, s(:lit, 0)))
+      end
+      whileSexp = s(:while, orConditionalLinesConditions)
+      block = conditionalLines.toRuby
+      if runI
+	 block << s(:lasgn, i.to_sym, 
+		    s(:call, s(:lvar, i.to_sym), 
+		      :+, s(:arglist, s(:lit, 1))))
+      end
+      whileSexp << block
+      if runI
+	 return sexp << whileSexp
+      end
+      return whileSexp
+   end
+
+   def orConditionalLinesConditions node=conditionalLines
+      if node.rest.respond_to? :next
+	 s(:or, node.first.term2.toRuby, orConditionalLinesConditions(node.rest.next))
+      else
+	 node.first.term2.toRuby
+      end
    end
 end
 
