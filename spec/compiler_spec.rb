@@ -100,10 +100,13 @@ describe "Compiler" do
    end
 
    it "compiles loops" do
-      pending
-      compile("w[1->3+4]")
-      compile("w1(5)[5>4->5+1]")
-      compile("w1[5>4->5+1]")
+      compile("w1(5)[5>4->5+1]")[1][0].should == :iter
+      compile("w1(5)[55+1]")[1][2][1].should == :i
+      compile("w(5)[55+1]")[1][1][2].should == :times
+      compile("w[1->3+4]")[1][0].should == :while
+      compile("w[1->3+4]")[1][1][1].should == 1
+      compile("w1[1->3+4]")[1][1].should == s(:lasgn, :i, s(:lit, 0))
+      compile("w1[1->3+4]")[1][2][0].should == :while
    end
 
    it "compiles assignments" do
