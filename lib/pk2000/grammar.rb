@@ -995,25 +995,43 @@ module Pk2000
   end
 
   module While1
-    def forTo
+    def count
       elements[1]
+    end
+
+    def lvl
+      elements[2]
+    end
+
+    def conditionalLines
+      elements[4]
     end
 
   end
 
   module While2
+    def level
+      elements[1]
+    end
+
+  end
+
+  module While3
     def count
       elements[1]
     end
 
-    def fixed
-      elements[3]
+    def lvl
+      elements[2]
     end
 
-    def conditionalLines
-      elements[5]
+    def forTo
+      elements[4]
     end
 
+    def block
+      elements[6]
+    end
   end
 
   def _nt_while
@@ -1024,154 +1042,242 @@ module Pk2000
       return cached
     end
 
-    i0, s0 = index, []
-    i1 = index
+    i0 = index
+    i1, s1 = index, []
+    i2 = index
     if input.index("w", index) == index
-      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
       @index += 1
     else
       terminal_parse_failure("w")
-      r2 = nil
+      r3 = nil
     end
-    if r2
-      r1 = r2
+    if r3
+      r2 = r3
     else
       if input.index("W", index) == index
-        r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("W")
-        r3 = nil
+        r4 = nil
       end
-      if r3
-        r1 = r3
+      if r4
+        r2 = r4
       else
-        self.index = i1
-        r1 = nil
+        self.index = i2
+        r2 = nil
       end
     end
-    s0 << r1
-    if r1
+    s1 << r2
+    if r2
       if input.index("1", index) == index
-        r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
         @index += 1
       else
         terminal_parse_failure("1")
-        r5 = nil
+        r6 = nil
       end
-      if r5
-        r4 = r5
+      if r6
+        r5 = r6
       else
-        r4 = instantiate_node(SyntaxNode,input, index...index)
+        r5 = instantiate_node(SyntaxNode,input, index...index)
       end
-      s0 << r4
-      if r4
-        i7, s7 = index, []
+      s1 << r5
+      if r5
+        i8, s8 = index, []
         if input.index("[", index) == index
-          r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
           terminal_parse_failure("[")
-          r8 = nil
+          r9 = nil
         end
-        s7 << r8
-        if r8
-          r9 = _nt_digits
-          s7 << r9
-          if r9
+        s8 << r9
+        if r9
+          r10 = _nt_digits
+          s8 << r10
+          if r10
             if input.index("]", index) == index
-              r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
               @index += 1
             else
               terminal_parse_failure("]")
-              r10 = nil
+              r11 = nil
             end
-            s7 << r10
+            s8 << r11
           end
         end
-        if s7.last
-          r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-          r7.extend(While0)
+        if s8.last
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          r8.extend(While0)
         else
-          self.index = i7
-          r7 = nil
+          self.index = i8
+          r8 = nil
         end
+        if r8
+          r7 = r8
+        else
+          r7 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s1 << r7
         if r7
-          r6 = r7
-        else
-          r6 = instantiate_node(SyntaxNode,input, index...index)
-        end
-        s0 << r6
-        if r6
-          i12, s12 = index, []
-          if input.index("(", index) == index
-            r13 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          if input.index("[", index) == index
+            r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
             @index += 1
           else
-            terminal_parse_failure("(")
-            r13 = nil
-          end
-          s12 << r13
-          if r13
-            r14 = _nt_operation
-            s12 << r14
-            if r14
-              if input.index(")", index) == index
-                r15 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                @index += 1
-              else
-                terminal_parse_failure(")")
-                r15 = nil
-              end
-              s12 << r15
-            end
-          end
-          if s12.last
-            r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
-            r12.extend(While1)
-          else
-            self.index = i12
+            terminal_parse_failure("[")
             r12 = nil
           end
+          s1 << r12
           if r12
-            r11 = r12
-          else
-            r11 = instantiate_node(SyntaxNode,input, index...index)
-          end
-          s0 << r11
-          if r11
-            if input.index("[", index) == index
-              r16 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
-            else
-              terminal_parse_failure("[")
-              r16 = nil
-            end
-            s0 << r16
-            if r16
-              r17 = _nt_conditionalLines
-              s0 << r17
-              if r17
-                if input.index("]", index) == index
-                  r18 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                  @index += 1
-                else
-                  terminal_parse_failure("]")
-                  r18 = nil
-                end
-                s0 << r18
+            r13 = _nt_conditionalLines
+            s1 << r13
+            if r13
+              if input.index("]", index) == index
+                r14 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                @index += 1
+              else
+                terminal_parse_failure("]")
+                r14 = nil
               end
+              s1 << r14
             end
           end
         end
       end
     end
-    if s0.last
-      r0 = instantiate_node(PKWhileNode,input, i0...index, s0)
-      r0.extend(While2)
+    if s1.last
+      r1 = instantiate_node(PKWhileNode,input, i1...index, s1)
+      r1.extend(While1)
     else
-      self.index = i0
-      r0 = nil
+      self.index = i1
+      r1 = nil
+    end
+    if r1
+      r0 = r1
+    else
+      i15, s15 = index, []
+      i16 = index
+      if input.index("w", index) == index
+        r17 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("w")
+        r17 = nil
+      end
+      if r17
+        r16 = r17
+      else
+        if input.index("W", index) == index
+          r18 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure("W")
+          r18 = nil
+        end
+        if r18
+          r16 = r18
+        else
+          self.index = i16
+          r16 = nil
+        end
+      end
+      s15 << r16
+      if r16
+        if input.index("1", index) == index
+          r20 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure("1")
+          r20 = nil
+        end
+        if r20
+          r19 = r20
+        else
+          r19 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s15 << r19
+        if r19
+          i22, s22 = index, []
+          if input.index("[", index) == index
+            r23 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("[")
+            r23 = nil
+          end
+          s22 << r23
+          if r23
+            r24 = _nt_digits
+            s22 << r24
+            if r24
+              if input.index("]", index) == index
+                r25 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                @index += 1
+              else
+                terminal_parse_failure("]")
+                r25 = nil
+              end
+              s22 << r25
+            end
+          end
+          if s22.last
+            r22 = instantiate_node(SyntaxNode,input, i22...index, s22)
+            r22.extend(While2)
+          else
+            self.index = i22
+            r22 = nil
+          end
+          if r22
+            r21 = r22
+          else
+            r21 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s15 << r21
+          if r21
+            if input.index("(", index) == index
+              r26 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure("(")
+              r26 = nil
+            end
+            s15 << r26
+            if r26
+              r27 = _nt_operation
+              s15 << r27
+              if r27
+                if input.index(")", index) == index
+                  r28 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  @index += 1
+                else
+                  terminal_parse_failure(")")
+                  r28 = nil
+                end
+                s15 << r28
+                if r28
+                  r29 = _nt_block
+                  s15 << r29
+                end
+              end
+            end
+          end
+        end
+      end
+      if s15.last
+        r15 = instantiate_node(PKForNode,input, i15...index, s15)
+        r15.extend(While3)
+      else
+        self.index = i15
+        r15 = nil
+      end
+      if r15
+        r0 = r15
+      else
+        self.index = i0
+        r0 = nil
+      end
     end
 
     node_cache[:while][start_index] = r0

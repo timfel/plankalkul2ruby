@@ -61,7 +61,9 @@ grammar Pk2000
    end
 
    rule while
-      ("w" / "W") count:"1"? ("[" level:digits "]")? fixed:("(" forTo:operation ")")? "[" conditionalLines "]" <PKWhileNode>
+      ("w" / "W") count:"1"? lvl:("[" level:digits "]")? "[" conditionalLines "]" <PKWhileNode>
+      /
+      ("w" / "W") count:"1"? lvl:("[" level:digits "]")? "(" forTo:operation ")" block <PKForNode>
    end
 
    rule conditionalLines
