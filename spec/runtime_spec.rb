@@ -1,6 +1,4 @@
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'pk2000runtime'
-include Plankalkuel
+require 'spec_helper' 
 
 describe PKVariable do 
    before do 

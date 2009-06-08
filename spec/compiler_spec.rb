@@ -1,9 +1,4 @@
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'pk2000core'
-require 'pk2000runtime'
-require 'ruby2ruby'
-
-include Plankalkuel
+require 'spec_helper' 
 
 describe "Compiler" do
    before do
