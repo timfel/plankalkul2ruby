@@ -1,0 +1,5 @@
+require 'polyglot'
+require 'treetop'
+require 'pk2000grammar'
+require 'pk2000core'
+require 'pk2000runtime'

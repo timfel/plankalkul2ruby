@@ -1,6 +1,3 @@
-require 'treetop'
-require 'pk2000'
-
 class Treetop::Runtime::SyntaxNode
    def toRuby
    end

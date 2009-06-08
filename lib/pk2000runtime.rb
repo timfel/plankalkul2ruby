@@ -1,3 +1,11 @@
+class PlankalkuelLoader
+   def self.load(filename, options = nil, &block)
+      File.open(filename) do |file|
+	 require ''
+      end
+   end
+end
+
 module Plankalkuel
    class PKTuple < Array
    end
