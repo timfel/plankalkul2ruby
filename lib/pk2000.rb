@@ -1,5 +1,6 @@
 require 'polyglot'
 require 'treetop'
+require 'ruby2ruby'
 require 'pk2000/grammar'
 require 'pk2000/core'
 require 'pk2000/runtime'
