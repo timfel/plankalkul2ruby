@@ -35,7 +35,8 @@ grammar Pk2000
    end
 
    rule statement
-      assignment / ifThen / while / block / builtIns / term2 / "(" statement ")" 
+      assignment / ifThen / while / block / builtIns / term2 
+      / "(" sub:statement ")" <PKBracketNode>
    end
    
    rule assignment
@@ -111,7 +112,9 @@ grammar Pk2000
    end 
 
    rule prefixedTerm
-      prefix term / term / "(" term2 ")" 
+      prefix term 
+      / term 
+      / "(" sub:term2 ")" <PKBracketNode>
    end
 
    rule tuple

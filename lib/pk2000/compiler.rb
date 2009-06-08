@@ -106,6 +106,12 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
    end
 end
 
+class PKBracketNode < Treetop::Runtime::SyntaxNode
+   def toRuby
+      s(:block , sub.toRuby)
+   end
+end
+
 class PKIterativeNode < Treetop::Runtime::SyntaxNode
    def flatten_tree_on sexp
       sexp << first.toRuby

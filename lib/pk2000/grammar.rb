@@ -653,7 +653,7 @@ module Pk2000
   end
 
   module Statement0
-    def statement
+    def sub
       elements[1]
     end
 
@@ -716,7 +716,7 @@ module Pk2000
                   end
                 end
                 if s7.last
-                  r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+                  r7 = instantiate_node(PKBracketNode,input, i7...index, s7)
                   r7.extend(Statement0)
                 else
                   self.index = i7
@@ -1881,7 +1881,7 @@ module Pk2000
   end
 
   module PrefixedTerm1
-    def term2
+    def sub
       elements[1]
     end
 
@@ -1941,7 +1941,7 @@ module Pk2000
           end
         end
         if s5.last
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          r5 = instantiate_node(PKBracketNode,input, i5...index, s5)
           r5.extend(PrefixedTerm1)
         else
           self.index = i5
