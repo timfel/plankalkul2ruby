@@ -92,6 +92,10 @@ describe "Compiler" do
       compile("[5+2\n8+2]", Fixnum).should == 10
    end
 
+   it "compiles bracketed statements" do
+      pending
+   end
+
    it "compiles ifThens" do
       compile("1->5", Fixnum)
       compile("1->5")[1][0].should == :if
