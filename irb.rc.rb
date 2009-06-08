@@ -6,8 +6,7 @@ END"
 
 require 'sexp_stuff'
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), "lib")
-require 'pk2000core'
-require 'pk2000runtime'
+require 'pk2000'
 include Plankalkuel
 PARSER  = Pk2000Parser.new
 TESTPROG = "15=>Z0[:4.0]
