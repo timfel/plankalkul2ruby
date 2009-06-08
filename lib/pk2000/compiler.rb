@@ -9,6 +9,18 @@ class PKNumberNode < Treetop::Runtime::SyntaxNode
    end
 end
 
+class PKPrefixNode < Treetop::Runtime::SyntaxNode
+   def toRuby
+      sub = subterm 
+      sub = subterm.term2 if subterm.respond_to? :term2
+      if prefix.text_value == "-"
+	 s(:call, sub.toRuby, :-@, s(:arglist))
+      elsif prefix.text_value == "!"
+	 s(:not, sub.toRuby)
+      end
+   end
+end
+
 class PKGenericVariableNode < Treetop::Runtime::SyntaxNode
    def toRuby
       s(:call, nil, text_value.to_sym, s(:arglist))

@@ -112,7 +112,7 @@ grammar Pk2000
    end 
 
    rule prefixedTerm
-      prefix term 
+      prefix subterm:("(" term2 ")" / term2) <PKPrefixNode>
       / term 
       / "(" sub:term2 ")" <PKBracketNode>
    end
