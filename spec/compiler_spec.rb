@@ -95,7 +95,8 @@ describe "Compiler" do
    end
 
    it "compiles bracketed statements" do
-      pending
+      compile("(1+2)", Fixnum).should == 3
+      compile("(1->1+2)", Fixnum).should == 3
    end
 
    it "compiles ifThens" do
