@@ -1,0 +1,23 @@
+== What is this?
+
+In 1945 Konrad Zuse developed the world's first higher-level 
+programming language - the "Plankalkül". After playing around
+with the only contemporary implementation I could find, 
+a language subset called "Plankalkül 2000" I decided to write 
+my own implementation, which I duefully called PK2000.
+
+=== Why
+I wanted my PK code to compile to Ruby code in order to be 
+able to require it directly into existing Ruby projects.
+This was mainly done to be able to demonstrate the behaviour 
+of PK programs using graphic bindings for Ruby.
+
+The reason for doing anything PK-related was a the "History 
+of Programming Languages" seminar which I attended in the summer 
+of 2009.
+
+=== How
+This project uses Treetop, Ruby2Ruby and Polyglot to parse, 
+compile and be able to directly require PK code.
+To use it, simple require 'pk2000' and some PK code 
+in your Ruby file.
