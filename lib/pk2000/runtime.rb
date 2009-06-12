@@ -121,7 +121,7 @@ module Plankalkuel
       [:+, :-, :*, :/, :<, :>].each do |item|
 	 define_method(item) do |term|
 	    dimensionTest! term.dimension if term.class == self.class
-	    self.to_i.send(item, term.to_i % dimension ** 2)
+	    self.to_i.send(item, term.to_i)
 	 end
       end
 
