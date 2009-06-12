@@ -16,6 +16,10 @@ class OptParse
 	    options[:verbose] = v
 	 end
 
+	 opts.on("-n", "--not-really", "Dry run") do |v|
+	    options[:dry] = v
+	 end
+
 	 opts.on("-c", "--call", "Add a function call for direct execution ") do |v|
 	    options[:call] = v
 	 end
@@ -56,6 +60,7 @@ def getPk options
    pkCode = File.open(options[:in]).read.
       gsub(" ", "").gsub("\n]", "]").
       gsub("[\n", "[").gsub(/^\n$/, "").
+      gsub("\n\n", "\n").
       gsub("END\n", "END")
    puts pkCode if options[:verbose]
    pkCode
@@ -85,5 +90,6 @@ end
 
 options = OptParse.parse(ARGV)
 puts options if options[:verbose]
-writeOut(mkRb(getPk(options), options), options)
+code = mkRb(getPk(options), options)
+writeOut(code) unless options[:dry]
 
