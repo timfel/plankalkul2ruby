@@ -41,7 +41,7 @@ describe "Parser" do
       eachNil? ["R0815[1:0](1)"], false
       eachNil? ["R815[:0](1,V0[:0])"], false
       eachNil? ["R3[0:4.0](Z1[:8.0],Z3[:8.0])"], false
-      eachNil? ["R01(1)"], true
+      eachNil? ["R1(1)"], true
    end
 
    it "puts blocks into context" do

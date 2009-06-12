@@ -12,6 +12,7 @@ class PlankalkuelLoader
 	 out = "require 'pk2000'\n"
 	 out << "include Plankalkuel\n"
 	 out << rbCode
+	 puts out
 	 eval(out)
       end
    end

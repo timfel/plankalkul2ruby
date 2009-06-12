@@ -169,7 +169,7 @@ class PKMethodNode < Treetop::Runtime::SyntaxNode
       arguments.split(",").each do |item|
 	 block << s(:call, s(:const, :PKVariable), 
 		    :define, s(:arglist, s(:array, s(:str, item), s(:str, ""), s(:str, "32.0")), 
-			      s(:lvar, item.to_sym)))
+			      s(:call, s(:lvar, item.to_sym), :to_i, s(:arglist))))
       end
       block << lines.toRuby
       block << s(:lasgn, :retVal, randauszug.rTuple.toRuby)
