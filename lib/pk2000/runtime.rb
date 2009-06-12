@@ -67,7 +67,7 @@ module Plankalkuel
 	       comp.each_with_index do |item,i|
 		  raise if item+1 > @type[i]
 		  sliceSize = @workingBounds.to_a.size / @type[i]
-		  sliceStart = sliceSize*item.to_i
+		  sliceStart = sliceSize*item.to_i+@workingBounds.to_a.first
 		  @workingBounds = sliceStart...(sliceStart+sliceSize)
 	       end
 	    end
