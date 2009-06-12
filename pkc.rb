@@ -91,5 +91,5 @@ end
 options = OptParse.parse(ARGV)
 puts options if options[:verbose]
 code = mkRb(getPk(options), options)
-writeOut(code) unless options[:dry]
+writeOut(code, options) unless options[:dry]
 
