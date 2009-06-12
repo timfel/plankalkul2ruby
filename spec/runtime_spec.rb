@@ -60,5 +60,13 @@ describe PKVariable do
       PKVariable.instance(["Z0", "1", "2.0"]).should_not.nil?
       proc { PKVariable.instance(["Z0", "1", "4.2.0"]) }.should raise_error(ArgumentError)
    end
+
+   it "selects the proper component even nested" do
+      v = PKVariable.instance(["Z0", "", "2.16.3.0"])
+      PKVariable.instance(["Z0", "1", "16.3.0"]).
+	 instance_eval("@workingBounds").to_a.first.should == 48
+      PKVariable.instance(["Z0", "1.15", "3.0"]).
+	 instance_eval("@workingBounds").to_a.first.should == 93
+   end
 end
 
