@@ -3290,6 +3290,10 @@ module Pk2000
   end
 
   module Variable0
+    def comp
+      elements[3]
+    end
+
     def type
       elements[5]
     end
