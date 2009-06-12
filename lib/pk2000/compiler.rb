@@ -166,10 +166,13 @@ class PKMethodNode < Treetop::Runtime::SyntaxNode
       block = s(:block)
       block << s(:call, s(:const, :PKVariable), :enterScope, s(:arglist))
       arguments = randauszug.vTuple.text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase
-      arguments.split(",").each do |item|
+      argumentTypes = randauszug.vTuple.text_value.
+	 split(/[\(|,]?V[0-9]\[:([0-9|\.]*)\]\)?/).select {|item| !item.empty?}
+      arguments.split(",").each_with_index do |item,index|
 	 block << s(:call, s(:const, :PKVariable), 
-		    :define, s(:arglist, s(:array, s(:str, item), s(:str, ""), s(:str, "32.0")), 
-			      s(:call, s(:lvar, item.to_sym), :to_i, s(:arglist))))
+		    :define, s(:arglist, s(:array, s(:str, item), s(:str, ""), 
+				s(:str, argumentTypes[index])), s(:call, 
+				s(:lvar, item.to_sym), :to_i, s(:arglist))))
       end
       block << lines.toRuby
       block << s(:lasgn, :retVal, randauszug.rTuple.toRuby)
