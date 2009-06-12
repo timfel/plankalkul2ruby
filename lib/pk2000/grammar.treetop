@@ -154,7 +154,7 @@ grammar Pk2000
    end
 
    rule variable
-      ("V" / "Z" / "R") [0-9]+ "[" component? ":" type "]" <PKVariableNode>
+      ("V" / "Z" / "R") [0-9]+ "[" comp:component? ":" type "]" <PKVariableNode>
    end
 
    rule dot
