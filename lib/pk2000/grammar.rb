@@ -444,11 +444,11 @@ module Pk2000
                     r25 = _nt_type
                     s19 << r25
                     if r25
-                      if input.index("]),V3[:", index) == index
-                        r26 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                        @index += 7
+                      if input.index("],V3[:", index) == index
+                        r26 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                        @index += 6
                       else
-                        terminal_parse_failure("]),V3[:")
+                        terminal_parse_failure("],V3[:")
                         r26 = nil
                       end
                       s19 << r26
@@ -520,11 +520,11 @@ module Pk2000
                       r35 = _nt_type
                       s29 << r35
                       if r35
-                        if input.index("]),V3[:", index) == index
-                          r36 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                          @index += 7
+                        if input.index("],V3[:", index) == index
+                          r36 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                          @index += 6
                         else
-                          terminal_parse_failure("]),V3[:")
+                          terminal_parse_failure("],V3[:")
                           r36 = nil
                         end
                         s29 << r36
@@ -532,11 +532,11 @@ module Pk2000
                           r37 = _nt_type
                           s29 << r37
                           if r37
-                            if input.index("]),V4[:", index) == index
-                              r38 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                              @index += 7
+                            if input.index("],V4[:", index) == index
+                              r38 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                              @index += 6
                             else
-                              terminal_parse_failure("]),V4[:")
+                              terminal_parse_failure("],V4[:")
                               r38 = nil
                             end
                             s29 << r38
@@ -610,11 +610,11 @@ module Pk2000
                         r47 = _nt_type
                         s41 << r47
                         if r47
-                          if input.index("]),V3[:", index) == index
-                            r48 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                            @index += 7
+                          if input.index("],V3[:", index) == index
+                            r48 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                            @index += 6
                           else
-                            terminal_parse_failure("]),V3[:")
+                            terminal_parse_failure("],V3[:")
                             r48 = nil
                           end
                           s41 << r48
@@ -622,11 +622,11 @@ module Pk2000
                             r49 = _nt_type
                             s41 << r49
                             if r49
-                              if input.index("]),V4[:", index) == index
-                                r50 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                                @index += 7
+                              if input.index("],V4[:", index) == index
+                                r50 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                                @index += 6
                               else
-                                terminal_parse_failure("]),V4[:")
+                                terminal_parse_failure("],V4[:")
                                 r50 = nil
                               end
                               s41 << r50
@@ -634,11 +634,11 @@ module Pk2000
                                 r51 = _nt_type
                                 s41 << r51
                                 if r51
-                                  if input.index("]),V5[:", index) == index
-                                    r52 = instantiate_node(SyntaxNode,input, index...(index + 7))
-                                    @index += 7
+                                  if input.index("],V5[:", index) == index
+                                    r52 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                                    @index += 6
                                   else
-                                    terminal_parse_failure("]),V5[:")
+                                    terminal_parse_failure("],V5[:")
                                     r52 = nil
                                   end
                                   s41 << r52

@@ -13,9 +13,9 @@ grammar Pk2000
       ("(V0[:" type "])" 
       / "(V0[:" type "],V1[:" type "])" 
       / "(V0[:" type "],V1[:" type "],V2[:" type "])"
-      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "])"
-      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "]),V4[:" type "])"
-      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "]),V4[:" type "]),V5[:" type "])") {
+      / "(V0[:" type "],V1[:" type "],V2[:" type "],V3[:" type "])"
+      / "(V0[:" type "],V1[:" type "],V2[:" type "],V3[:" type "],V4[:" type "])"
+      / "(V0[:" type "],V1[:" type "],V2[:" type "],V3[:" type "],V4[:" type "],V5[:" type "])") {
 	 def toRuby
 	    # only need comma-delimited list of var-names
 	    masgn = text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase.split(",")
