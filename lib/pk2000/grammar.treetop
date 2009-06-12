@@ -12,7 +12,10 @@ grammar Pk2000
    rule vTuple
       ("(V0[:" type "])" 
       / "(V0[:" type "],V1[:" type "])" 
-      / "(V0[:" type "],V1[:" type "],V2[:" type "])") {
+      / "(V0[:" type "],V1[:" type "],V2[:" type "])"
+      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "])"
+      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "]),V4[:" type "])"
+      / "(V0[:" type "],V1[:" type "],V2[:" type "]),V3[:" type "]),V4[:" type "]),V5[:" type "])") {
 	 def toRuby
 	    # only need comma-delimited list of var-names
 	    masgn = text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase.split(",")
@@ -28,6 +31,9 @@ grammar Pk2000
       / "(R0[:" type "])" <PKVariableNode>
       / "(R0[:" type "],R1[:" type "])" <PKVariableNode>
       / "(R0[:" type "],R1[:" type "],R2[:" type "])" <PKVariableNode>
+      / "(R0[:" type "],R1[:" type "],R2[:" type "],R3[:" type "])" <PKVariableNode>
+      / "(R0[:" type "],R1[:" type "],R2[:" type "],R3[:" type "],R4[:" type "])" <PKVariableNode>
+      / "(R0[:" type "],R1[:" type "],R2[:" type "],R3[:" type "],R4[:" type "],R5[:" type "])" <PKVariableNode>
    end
 
    rule lines
