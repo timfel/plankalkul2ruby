@@ -1,5 +1,6 @@
 class Treetop::Runtime::SyntaxNode
    def toRuby
+      s(:lit, text_value)
    end
 end
 
@@ -99,18 +100,25 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
       end
    end
 
-   def varToRuby components=nil
-      components ||= text_value.split(/:|\[|\]/)
+   def varToRuby components=[]
+      if components.empty?
+	 text_value =~ /([Z|V|R][0-9]+)/
+	 components[0] = $1
+	 components[1] = s(:lit, "")
+	 components[1] = comp.toRuby if respond_to? :comp
+	 components[2] = type.text_value
+      end
       s(:call, s(:const, :PKVariable), :instance, 
 	s(:arglist, s(:array, s(:lit, components[0]), 
-		     s(:lit, components[1]), s(:lit, components[2]))))
+		     components[1], s(:lit, components[2]))))
    end
 
    def tupleToRuby
+      # this is exclusively for rTuples... 
       sexp = s(:array)
       text_value.split(",").each do |input|
 	 input =~ /(.*)\[(.*):(.*)\]/
-	 c = [$1, $2, $3]
+	 c = [$1, s(:lit, $2), $3]
 	 c.collect! { |x| x.gsub(/\(|\)/, "") }
 	 sexp << varToRuby(c)
       end
