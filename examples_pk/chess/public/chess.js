@@ -2,11 +2,13 @@
 $(function () {
       showCheckerBoard(8,8);
       showStones();
+      get_moves();
 })
 
 var tiles = [[],[],[],[],[],[],[],[]];
 var stones = [[],[],[],[],[],[],[],[]];
 var clicked = null;
+var count = 0;
 
 function tile(x,y) {
    this.x = x;
@@ -38,6 +40,7 @@ function move(x1,y1,x2,y2) {
 	 function(data) {
 	    if (data) {
 	       set_stone(x1,y1,x2,y2);
+	       count = count + 1;
 	    };
 	 });
 }
@@ -83,4 +86,15 @@ function showStones() {
    stone("T_w", 7, 7);
    stone("T_b", 0, 0);
    stone("T_b", 7, 0);
+}
+
+function get_moves() {
+   timeout = 100;
+   $.getJSON("/replay/"+count, function (data) {
+	 if (!(data == false)) { 
+	    set_stone(data[0],data[1],data[2],data[3]);
+	    timeout = 10;
+	    count = count + 1;
+	 }});
+   setTimeout("get_moves()", timeout);
 }

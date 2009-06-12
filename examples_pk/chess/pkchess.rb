@@ -1,7 +1,8 @@
 require 'pk2000'
 require 'logic/setupColor' 	# single Color setup, p11(0/1)
 require 'logic/setup'		# complete setup, p1(0)
-require 'logic/select'	# is_selectable_by_you? p2(0/1)
+require 'logic/select'		# is_selectable_by_you? p2(0/1)
+require 'logic/move'		# is_selectable_by_you? p2(0/1)
 
 class PKChess
    include Plankalkuel
@@ -15,6 +16,7 @@ class PKChess
    end
 
    def move x1,y1,x2,y2
-      true
+      @field = Plankalkuel.p3(x1,y1,x2,y2,@field,0)
+      @field > 0
    end
 end

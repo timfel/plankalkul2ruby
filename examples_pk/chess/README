@@ -6,12 +6,12 @@ P11 - setUpColor # sets up one color
 
 P2 - something there, that's yours? (3.0, 3.0, 2.16.2.3.0, 0)(int,int,int + (b/w)) -> (0/1)
 
-P4 - move that there (if you can)
-P41 - what is there? (3.0)
+P3 - move that there (if you can)
+P31 - what is there? (3.0)
 	001 -> Bauer
 	010 -> Springer
 	011 -> Läufer
 	100 -> Turm
 	101 -> Dame
 	110 -> König
-P42 - can that move so? 
+P32 - can that move so? 
