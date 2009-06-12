@@ -1,0 +1,16 @@
+.overlay {
+   color: #0ff;
+   opacity: 0.5;
+}
+
+.tile {
+   width: 50px;
+   height: 50px;
+   position: fixed;
+}
+
+.board {
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: 100px;
+}
