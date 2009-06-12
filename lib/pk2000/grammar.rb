@@ -176,6 +176,75 @@ module Pk2000
   end
 
   module VTuple3
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+  end
+
+  module VTuple4
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+    def type
+      elements[9]
+    end
+
+  end
+
+  module VTuple5
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+    def type
+      elements[9]
+    end
+
+    def type
+      elements[11]
+    end
+
+  end
+
+  module VTuple6
 	 def toRuby
 	    # only need comma-delimited list of var-names
 	    masgn = text_value.gsub(/\(|\)|\[[^V]*\]/, "").downcase.split(",")
@@ -226,7 +295,7 @@ module Pk2000
     end
     if r1
       r0 = r1
-      r0.extend(VTuple3)
+      r0.extend(VTuple6)
     else
       i5, s5 = index, []
       if input.index("(V0[:", index) == index
@@ -274,7 +343,7 @@ module Pk2000
       end
       if r5
         r0 = r5
-        r0.extend(VTuple3)
+        r0.extend(VTuple6)
       else
         i11, s11 = index, []
         if input.index("(V0[:", index) == index
@@ -336,10 +405,283 @@ module Pk2000
         end
         if r11
           r0 = r11
-          r0.extend(VTuple3)
+          r0.extend(VTuple6)
         else
-          self.index = i0
-          r0 = nil
+          i19, s19 = index, []
+          if input.index("(V0[:", index) == index
+            r20 = instantiate_node(SyntaxNode,input, index...(index + 5))
+            @index += 5
+          else
+            terminal_parse_failure("(V0[:")
+            r20 = nil
+          end
+          s19 << r20
+          if r20
+            r21 = _nt_type
+            s19 << r21
+            if r21
+              if input.index("],V1[:", index) == index
+                r22 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                @index += 6
+              else
+                terminal_parse_failure("],V1[:")
+                r22 = nil
+              end
+              s19 << r22
+              if r22
+                r23 = _nt_type
+                s19 << r23
+                if r23
+                  if input.index("],V2[:", index) == index
+                    r24 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                    @index += 6
+                  else
+                    terminal_parse_failure("],V2[:")
+                    r24 = nil
+                  end
+                  s19 << r24
+                  if r24
+                    r25 = _nt_type
+                    s19 << r25
+                    if r25
+                      if input.index("]),V3[:", index) == index
+                        r26 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                        @index += 7
+                      else
+                        terminal_parse_failure("]),V3[:")
+                        r26 = nil
+                      end
+                      s19 << r26
+                      if r26
+                        r27 = _nt_type
+                        s19 << r27
+                        if r27
+                          if input.index("])", index) == index
+                            r28 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                            @index += 2
+                          else
+                            terminal_parse_failure("])")
+                            r28 = nil
+                          end
+                          s19 << r28
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+          if s19.last
+            r19 = instantiate_node(SyntaxNode,input, i19...index, s19)
+            r19.extend(VTuple3)
+          else
+            self.index = i19
+            r19 = nil
+          end
+          if r19
+            r0 = r19
+            r0.extend(VTuple6)
+          else
+            i29, s29 = index, []
+            if input.index("(V0[:", index) == index
+              r30 = instantiate_node(SyntaxNode,input, index...(index + 5))
+              @index += 5
+            else
+              terminal_parse_failure("(V0[:")
+              r30 = nil
+            end
+            s29 << r30
+            if r30
+              r31 = _nt_type
+              s29 << r31
+              if r31
+                if input.index("],V1[:", index) == index
+                  r32 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                  @index += 6
+                else
+                  terminal_parse_failure("],V1[:")
+                  r32 = nil
+                end
+                s29 << r32
+                if r32
+                  r33 = _nt_type
+                  s29 << r33
+                  if r33
+                    if input.index("],V2[:", index) == index
+                      r34 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                      @index += 6
+                    else
+                      terminal_parse_failure("],V2[:")
+                      r34 = nil
+                    end
+                    s29 << r34
+                    if r34
+                      r35 = _nt_type
+                      s29 << r35
+                      if r35
+                        if input.index("]),V3[:", index) == index
+                          r36 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                          @index += 7
+                        else
+                          terminal_parse_failure("]),V3[:")
+                          r36 = nil
+                        end
+                        s29 << r36
+                        if r36
+                          r37 = _nt_type
+                          s29 << r37
+                          if r37
+                            if input.index("]),V4[:", index) == index
+                              r38 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                              @index += 7
+                            else
+                              terminal_parse_failure("]),V4[:")
+                              r38 = nil
+                            end
+                            s29 << r38
+                            if r38
+                              r39 = _nt_type
+                              s29 << r39
+                              if r39
+                                if input.index("])", index) == index
+                                  r40 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                                  @index += 2
+                                else
+                                  terminal_parse_failure("])")
+                                  r40 = nil
+                                end
+                                s29 << r40
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+            if s29.last
+              r29 = instantiate_node(SyntaxNode,input, i29...index, s29)
+              r29.extend(VTuple4)
+            else
+              self.index = i29
+              r29 = nil
+            end
+            if r29
+              r0 = r29
+              r0.extend(VTuple6)
+            else
+              i41, s41 = index, []
+              if input.index("(V0[:", index) == index
+                r42 = instantiate_node(SyntaxNode,input, index...(index + 5))
+                @index += 5
+              else
+                terminal_parse_failure("(V0[:")
+                r42 = nil
+              end
+              s41 << r42
+              if r42
+                r43 = _nt_type
+                s41 << r43
+                if r43
+                  if input.index("],V1[:", index) == index
+                    r44 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                    @index += 6
+                  else
+                    terminal_parse_failure("],V1[:")
+                    r44 = nil
+                  end
+                  s41 << r44
+                  if r44
+                    r45 = _nt_type
+                    s41 << r45
+                    if r45
+                      if input.index("],V2[:", index) == index
+                        r46 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                        @index += 6
+                      else
+                        terminal_parse_failure("],V2[:")
+                        r46 = nil
+                      end
+                      s41 << r46
+                      if r46
+                        r47 = _nt_type
+                        s41 << r47
+                        if r47
+                          if input.index("]),V3[:", index) == index
+                            r48 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                            @index += 7
+                          else
+                            terminal_parse_failure("]),V3[:")
+                            r48 = nil
+                          end
+                          s41 << r48
+                          if r48
+                            r49 = _nt_type
+                            s41 << r49
+                            if r49
+                              if input.index("]),V4[:", index) == index
+                                r50 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                                @index += 7
+                              else
+                                terminal_parse_failure("]),V4[:")
+                                r50 = nil
+                              end
+                              s41 << r50
+                              if r50
+                                r51 = _nt_type
+                                s41 << r51
+                                if r51
+                                  if input.index("]),V5[:", index) == index
+                                    r52 = instantiate_node(SyntaxNode,input, index...(index + 7))
+                                    @index += 7
+                                  else
+                                    terminal_parse_failure("]),V5[:")
+                                    r52 = nil
+                                  end
+                                  s41 << r52
+                                  if r52
+                                    r53 = _nt_type
+                                    s41 << r53
+                                    if r53
+                                      if input.index("])", index) == index
+                                        r54 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                                        @index += 2
+                                      else
+                                        terminal_parse_failure("])")
+                                        r54 = nil
+                                      end
+                                      s41 << r54
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+              if s41.last
+                r41 = instantiate_node(SyntaxNode,input, i41...index, s41)
+                r41.extend(VTuple5)
+              else
+                self.index = i41
+                r41 = nil
+              end
+              if r41
+                r0 = r41
+                r0.extend(VTuple6)
+              else
+                self.index = i0
+                r0 = nil
+              end
+            end
+          end
         end
       end
     end
@@ -385,6 +727,75 @@ module Pk2000
 
     def type
       elements[5]
+    end
+
+  end
+
+  module RTuple4
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+  end
+
+  module RTuple5
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+    def type
+      elements[9]
+    end
+
+  end
+
+  module RTuple6
+    def type
+      elements[1]
+    end
+
+    def type
+      elements[3]
+    end
+
+    def type
+      elements[5]
+    end
+
+    def type
+      elements[7]
+    end
+
+    def type
+      elements[9]
+    end
+
+    def type
+      elements[11]
     end
 
   end
@@ -572,8 +983,278 @@ module Pk2000
           if r15
             r0 = r15
           else
-            self.index = i0
-            r0 = nil
+            i23, s23 = index, []
+            if input.index("(R0[:", index) == index
+              r24 = instantiate_node(SyntaxNode,input, index...(index + 5))
+              @index += 5
+            else
+              terminal_parse_failure("(R0[:")
+              r24 = nil
+            end
+            s23 << r24
+            if r24
+              r25 = _nt_type
+              s23 << r25
+              if r25
+                if input.index("],R1[:", index) == index
+                  r26 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                  @index += 6
+                else
+                  terminal_parse_failure("],R1[:")
+                  r26 = nil
+                end
+                s23 << r26
+                if r26
+                  r27 = _nt_type
+                  s23 << r27
+                  if r27
+                    if input.index("],R2[:", index) == index
+                      r28 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                      @index += 6
+                    else
+                      terminal_parse_failure("],R2[:")
+                      r28 = nil
+                    end
+                    s23 << r28
+                    if r28
+                      r29 = _nt_type
+                      s23 << r29
+                      if r29
+                        if input.index("],R3[:", index) == index
+                          r30 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                          @index += 6
+                        else
+                          terminal_parse_failure("],R3[:")
+                          r30 = nil
+                        end
+                        s23 << r30
+                        if r30
+                          r31 = _nt_type
+                          s23 << r31
+                          if r31
+                            if input.index("])", index) == index
+                              r32 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                              @index += 2
+                            else
+                              terminal_parse_failure("])")
+                              r32 = nil
+                            end
+                            s23 << r32
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+            if s23.last
+              r23 = instantiate_node(PKVariableNode,input, i23...index, s23)
+              r23.extend(RTuple4)
+            else
+              self.index = i23
+              r23 = nil
+            end
+            if r23
+              r0 = r23
+            else
+              i33, s33 = index, []
+              if input.index("(R0[:", index) == index
+                r34 = instantiate_node(SyntaxNode,input, index...(index + 5))
+                @index += 5
+              else
+                terminal_parse_failure("(R0[:")
+                r34 = nil
+              end
+              s33 << r34
+              if r34
+                r35 = _nt_type
+                s33 << r35
+                if r35
+                  if input.index("],R1[:", index) == index
+                    r36 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                    @index += 6
+                  else
+                    terminal_parse_failure("],R1[:")
+                    r36 = nil
+                  end
+                  s33 << r36
+                  if r36
+                    r37 = _nt_type
+                    s33 << r37
+                    if r37
+                      if input.index("],R2[:", index) == index
+                        r38 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                        @index += 6
+                      else
+                        terminal_parse_failure("],R2[:")
+                        r38 = nil
+                      end
+                      s33 << r38
+                      if r38
+                        r39 = _nt_type
+                        s33 << r39
+                        if r39
+                          if input.index("],R3[:", index) == index
+                            r40 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                            @index += 6
+                          else
+                            terminal_parse_failure("],R3[:")
+                            r40 = nil
+                          end
+                          s33 << r40
+                          if r40
+                            r41 = _nt_type
+                            s33 << r41
+                            if r41
+                              if input.index("],R4[:", index) == index
+                                r42 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                                @index += 6
+                              else
+                                terminal_parse_failure("],R4[:")
+                                r42 = nil
+                              end
+                              s33 << r42
+                              if r42
+                                r43 = _nt_type
+                                s33 << r43
+                                if r43
+                                  if input.index("])", index) == index
+                                    r44 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                                    @index += 2
+                                  else
+                                    terminal_parse_failure("])")
+                                    r44 = nil
+                                  end
+                                  s33 << r44
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+              if s33.last
+                r33 = instantiate_node(PKVariableNode,input, i33...index, s33)
+                r33.extend(RTuple5)
+              else
+                self.index = i33
+                r33 = nil
+              end
+              if r33
+                r0 = r33
+              else
+                i45, s45 = index, []
+                if input.index("(R0[:", index) == index
+                  r46 = instantiate_node(SyntaxNode,input, index...(index + 5))
+                  @index += 5
+                else
+                  terminal_parse_failure("(R0[:")
+                  r46 = nil
+                end
+                s45 << r46
+                if r46
+                  r47 = _nt_type
+                  s45 << r47
+                  if r47
+                    if input.index("],R1[:", index) == index
+                      r48 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                      @index += 6
+                    else
+                      terminal_parse_failure("],R1[:")
+                      r48 = nil
+                    end
+                    s45 << r48
+                    if r48
+                      r49 = _nt_type
+                      s45 << r49
+                      if r49
+                        if input.index("],R2[:", index) == index
+                          r50 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                          @index += 6
+                        else
+                          terminal_parse_failure("],R2[:")
+                          r50 = nil
+                        end
+                        s45 << r50
+                        if r50
+                          r51 = _nt_type
+                          s45 << r51
+                          if r51
+                            if input.index("],R3[:", index) == index
+                              r52 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                              @index += 6
+                            else
+                              terminal_parse_failure("],R3[:")
+                              r52 = nil
+                            end
+                            s45 << r52
+                            if r52
+                              r53 = _nt_type
+                              s45 << r53
+                              if r53
+                                if input.index("],R4[:", index) == index
+                                  r54 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                                  @index += 6
+                                else
+                                  terminal_parse_failure("],R4[:")
+                                  r54 = nil
+                                end
+                                s45 << r54
+                                if r54
+                                  r55 = _nt_type
+                                  s45 << r55
+                                  if r55
+                                    if input.index("],R5[:", index) == index
+                                      r56 = instantiate_node(SyntaxNode,input, index...(index + 6))
+                                      @index += 6
+                                    else
+                                      terminal_parse_failure("],R5[:")
+                                      r56 = nil
+                                    end
+                                    s45 << r56
+                                    if r56
+                                      r57 = _nt_type
+                                      s45 << r57
+                                      if r57
+                                        if input.index("])", index) == index
+                                          r58 = instantiate_node(SyntaxNode,input, index...(index + 2))
+                                          @index += 2
+                                        else
+                                          terminal_parse_failure("])")
+                                          r58 = nil
+                                        end
+                                        s45 << r58
+                                      end
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+                if s45.last
+                  r45 = instantiate_node(PKVariableNode,input, i45...index, s45)
+                  r45.extend(RTuple6)
+                else
+                  self.index = i45
+                  r45 = nil
+                end
+                if r45
+                  r0 = r45
+                else
+                  self.index = i0
+                  r0 = nil
+                end
+              end
+            end
           end
         end
       end
