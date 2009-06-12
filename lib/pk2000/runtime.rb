@@ -65,7 +65,7 @@ module Plankalkuel
 	 begin
 	    unless (comp.empty? || !typeSafe?(type,comp.size))
 	       comp.each_with_index do |item,i|
-		  raise if item > @type[i]
+		  raise if item+1 > @type[i]
 		  sliceSize = @workingBounds.to_a.size / @type[i]
 		  sliceStart = sliceSize*item.to_i
 		  @workingBounds = sliceStart...(sliceStart+sliceSize)
@@ -74,7 +74,7 @@ module Plankalkuel
 	 rescue Exception
 	    raise ArgumentError,("The variable "+@name.to_s+" has been previously
 				 referenced with type "+@type.to_s+", however, 
-				 I now got "+compString.to_s)
+				 I now got "+(compString << type).to_s)
 	 end
 	 self
       end
