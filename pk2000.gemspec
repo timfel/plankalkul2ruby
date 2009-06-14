@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name = "pk2000"
-  s.version = "0.0.4"
+  s.version = "0.0.5"
   s.authors = ["Tim Felgentreff"]
-  s.date = "2009-06-12"
+  s.date = "2009-06-13"
   s.description = "use Zuse's Plankalkül with Ruby"
   s.email = "tim@nada1.de"
   s.extra_rdoc_files = Dir["README.rdoc", "LICENSE"]
