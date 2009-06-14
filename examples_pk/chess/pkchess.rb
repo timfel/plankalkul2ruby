@@ -2,7 +2,13 @@ require 'pk2000'
 require 'logic/setupColor' 	# single Color setup, p11(0/1)
 require 'logic/setup'		# complete setup, p1(0)
 require 'logic/select'		# is_selectable_by_you? p2(0/1)
-require 'logic/move'		# is_selectable_by_you? p2(0/1)
+require 'logic/move'		# is_movable_there? p2(0/1)
+require 'logic/king'		# king move
+require 'logic/queen'		# queen move
+require 'logic/rook'		# rook move
+require 'logic/bishop'		# bishop move
+require 'logic/knight'		# knight move
+require 'logic/pawn'		# pawn move
 
 class PKChess
    include Plankalkuel
@@ -11,12 +17,15 @@ class PKChess
       @field = Plankalkuel.p1(0)
    end
 
-   def select x,y
-      Plankalkuel.p2(x,y,@field,0).to_i > 0
+   def select x,y,color
+      Plankalkuel.p2(x,y,@field,color).to_i > 0
    end
 
-   def move x1,y1,x2,y2
-      @field = Plankalkuel.p3(x1,y1,x2,y2,@field,0)
-      @field > 0
+   def move x1,y1,x2,y2,color
+      field = Plankalkuel.p3(x1,y1,x2,y2,@field,color)
+      if field > 0
+	 @field = field
+      end
+      field > 0
    end
 end

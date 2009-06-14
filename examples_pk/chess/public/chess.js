@@ -1,13 +1,14 @@
-
 $(function () {
       showCheckerBoard(8,8);
       showStones();
-      get_moves();
+      getColor();
+      getMoves();
 })
 
 var tiles = [[],[],[],[],[],[],[],[]];
 var stones = [[],[],[],[],[],[],[],[]];
 var clicked = null;
+var color = 0;
 var count = 0;
 
 function tile(x,y) {
@@ -32,21 +33,21 @@ function stone(name,x,y) {
    o.css("position", "absolute");
    $(".board").append(o);
    stones[x][y] = o;
-   set_stone(x,y,x,y);
+   setStone(x,y,x,y);
 }
 
 function move(x1,y1,x2,y2) {
-   $.getJSON("/move/"+x1+"/"+y1+"/to/"+x2+"/"+y2, 
+   $.getJSON("/move/"+color+"/"+x1+"/"+y1+"/to/"+x2+"/"+y2, 
 	 function(data) {
 	    if (data) {
-	       set_stone(x1,y1,x2,y2);
+	       setStone(x1,y1,x2,y2);
 	       count = count + 1;
 	    };
 	 });
 }
 
 function click(o,x,y) {
-   $.getJSON("/select/"+x+"/"+y, function(data) {
+   $.getJSON("/select/"+color+"/"+x+"/"+y, function(data) {
          if (clicked == null) {
 	    if (data) {
 	       clicked = [x,y];
@@ -59,7 +60,7 @@ function click(o,x,y) {
          }});
 }
 
-function set_stone(x,y,x1,y1) {
+function setStone(x,y,x1,y1) {
    pos = tiles[x1][y1].position();
    o = stones[x][y]
    o.animate({
@@ -86,15 +87,33 @@ function showStones() {
    stone("T_w", 7, 7);
    stone("T_b", 0, 0);
    stone("T_b", 7, 0);
+   stone("L_w", 2, 7);
+   stone("L_w", 5, 7);
+   stone("L_b", 2, 0);
+   stone("L_b", 5, 0);
+   stone("S_w", 1, 7);
+   stone("S_w", 6, 7);
+   stone("S_b", 1, 0);
+   stone("S_b", 6, 0);
+   stone("D_w", 3, 7);
+   stone("K_w", 4, 7);
+   stone("D_b", 3, 0);
+   stone("K_b", 4, 0);
 }
 
-function get_moves() {
-   timeout = 100;
+function getMoves() {
+   timeout = 1000;
    $.getJSON("/replay/"+count, function (data) {
 	 if (!(data == false)) { 
-	    set_stone(data[0],data[1],data[2],data[3]);
-	    timeout = 10;
+	    setStone(data[0],data[1],data[2],data[3]);
+	    timeout = 1;
 	    count = count + 1;
 	 }});
-   setTimeout("get_moves()", timeout);
+   setTimeout("getMoves()", timeout);
+}
+
+function getColor() {
+   $.getJSON("/color", function (data) {
+      color = data;
+   });
 }
