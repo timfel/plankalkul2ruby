@@ -55,8 +55,7 @@ module Plankalkuel
       end
 
       def strToComp str
-	 return [str] if str.is_a? Fixnum
-	 return [str.to_i] if str.is_a? PKVariable
+	 return [str.to_i] if !(str.is_a? String)
 	 str.split(".").collect {|item| item.to_i}
       end
 
