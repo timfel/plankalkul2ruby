@@ -8,7 +8,7 @@ $(function () {
 var tiles = [[],[],[],[],[],[],[],[]];
 var stones = [[],[],[],[],[],[],[],[]];
 var clicked = null;
-var color = 0;
+var color = null;
 var count = 0;
 
 function tile(x,y) {
@@ -29,7 +29,7 @@ function tile(x,y) {
 }
 
 function stone(name,x,y) {
-   o = $("<div>"+name+"</div>");
+   o = $('<img src="'+name+'.gif" />');
    o.css("position", "absolute");
    $(".board").append(o);
    stones[x][y] = o;
@@ -42,6 +42,15 @@ function move(x1,y1,x2,y2) {
 	    if (data) {
 	       setStone(x1,y1,x2,y2);
 	       count = count + 1;
+	    };
+	 });
+}
+
+function delet(x,y) {
+   $.getJSON("/delete/"+color+"/"+x+"/"+y, 
+	 function(data) {
+	    if (data) {
+	       stone[x][y].remove
 	    };
 	 });
 }
@@ -67,6 +76,7 @@ function setStone(x,y,x1,y1) {
 	    left: pos.left+"px",
 	    top: pos.top+"px" }, 500);
    stones[x][y] = null;
+   if (color != null) delet(x1,y1);
    stones[x1][y1] = o;
 }
 
@@ -80,25 +90,25 @@ function showCheckerBoard(x, y) {
 
 function showStones() {
    for (i = 0; i < 8; i++) {
-      stone("B_b", i, 1);
-      stone("B_w", i, 6);
+      stone("pawnB", i, 1);
+      stone("pawnW", i, 6);
    }
-   stone("T_w", 0, 7);
-   stone("T_w", 7, 7);
-   stone("T_b", 0, 0);
-   stone("T_b", 7, 0);
-   stone("L_w", 2, 7);
-   stone("L_w", 5, 7);
-   stone("L_b", 2, 0);
-   stone("L_b", 5, 0);
-   stone("S_w", 1, 7);
-   stone("S_w", 6, 7);
-   stone("S_b", 1, 0);
-   stone("S_b", 6, 0);
-   stone("D_w", 3, 7);
-   stone("K_w", 4, 7);
-   stone("D_b", 3, 0);
-   stone("K_b", 4, 0);
+   stone("rookW", 0, 7);
+   stone("rookW", 7, 7);
+   stone("rookB", 0, 0);
+   stone("rookB", 7, 0);
+   stone("bishopW", 2, 7);
+   stone("bishopW", 5, 7);
+   stone("bishopB", 2, 0);
+   stone("bishopB", 5, 0);
+   stone("knightW", 1, 7);
+   stone("knightW", 6, 7);
+   stone("knightB", 1, 0);
+   stone("knightB", 6, 0);
+   stone("queenW", 3, 7);
+   stone("kingW", 4, 7);
+   stone("queenB", 3, 0);
+   stone("kingB", 4, 0);
 }
 
 function getMoves() {

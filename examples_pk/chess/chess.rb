@@ -32,6 +32,10 @@ class ChessGame < Sinatra::Default
       r.to_json
    end
 
+   get '/delete/:color/:x/:y' do
+      @@chess.delete(params[:x],params[:y],params[:color]).to_json
+   end
+
    get '/replay/:i' do
       r = @@moves[params[:i].to_i] || false
       r.to_json

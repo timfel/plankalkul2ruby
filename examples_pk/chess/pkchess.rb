@@ -9,6 +9,7 @@ require 'logic/rook'		# rook move
 require 'logic/bishop'		# bishop move
 require 'logic/knight'		# knight move
 require 'logic/pawn'		# pawn move
+#require 'logic/delete'		# deleting stones
 
 class PKChess
    include Plankalkuel
@@ -26,6 +27,12 @@ class PKChess
       if field > 0
 	 @field = field
       end
+      field > 0
+   end
+   
+   def delete x,y,color
+      field = Plankalkuel.p37(x,y,@field,color)
+      @field = field if field > 0
       field > 0
    end
 end

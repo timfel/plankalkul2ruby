@@ -9,6 +9,7 @@ require 'rook'
 require 'bishop'
 require 'knight'
 require 'pawn'
+require 'delete'
 
 puts Plankalkuel.p11(1).to_i
 puts Plankalkuel.p11(0).to_i
