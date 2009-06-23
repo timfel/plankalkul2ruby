@@ -1,5 +1,6 @@
 class Array
    def toPKComponent
+      "" if self.empty?
       self
    end
 end
@@ -12,7 +13,7 @@ end
 
 class Object
    def toPKComponent
-      self.to_i
+      [self.to_i]
    end
 end
 
@@ -27,7 +28,7 @@ module Plankalkuel
       def component comp, type
 	 c = comp.toPKComponent
 	 unless c.empty?
-	    return self[c.first].component(c[1..-1].to_s, type)
+	    return self[c.first].component(c[1..-1].toPKComponent, type)
 	 else
 	    self
 	 end
@@ -38,6 +39,10 @@ module Plankalkuel
 	 self.each_with_index do |item,i|
 	    each <= tuple[i]
 	 end
+      end
+
+      def dimension
+	 self.size
       end
    end
 
@@ -108,7 +113,7 @@ module Plankalkuel
 	 rescue Exception
 	    raise ArgumentError,("The variable "+@name.to_s+" has been previously "+
 				 "referenced with type "+@type.to_s+", however, "+
-				 "I now got "+(compString << type).to_s)
+				 "I now got "+(comp << type).to_s)
 	 end
 	 self
       end

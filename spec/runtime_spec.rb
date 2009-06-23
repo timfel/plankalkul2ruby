@@ -12,8 +12,8 @@ describe PKTuple do
    it "allows access to variables as usual through the component" do
       PKTuple.new([@z0, @z1]).component("0", "8.0").
 	 should.is_a?(PKVariable) == true
-      PKTuple.new([@z0, @z1]).component("0", "8.0").
-	 should.to_i == 255
+      PKTuple.new([@z0, @z1]).component("0", "8.0").to_i
+	 .should == 255
    end
 
    it "passes component queries into the variables in it" do
