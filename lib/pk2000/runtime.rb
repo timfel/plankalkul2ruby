@@ -1,5 +1,44 @@
+class Array
+   def toPKComponent
+      self
+   end
+end
+
+class String
+   def toPKComponent
+      self.split(".").collect {|item| item.to_i}
+   end
+end
+
+class Object
+   def toPKComponent
+      self.to_i
+   end
+end
+
 module Plankalkuel
    class PKTuple < Array
+      def initialize arr
+	 arr.each do |item|
+	    self << item if item.is_a? PKVariable
+	 end
+      end
+
+      def component comp, type
+	 c = comp.toPKComponent
+	 unless c.empty?
+	    return self[c.first].component(c[1..-1].to_s, type)
+	 else
+	    self
+	 end
+      end
+
+      def <= tuple
+	 raise ArgumentError,("I need a PKTuple") unless tuple.is_a? PKTuple
+	 self.each_with_index do |item,i|
+	    each <= tuple[i]
+	 end
+      end
    end
 
    class PKVariable
@@ -41,7 +80,7 @@ module Plankalkuel
 
       def initialize array
 	 @name = array.first.upcase.to_sym
-	 @type = strToComp(array.last)
+	 @type = array.last.toPKComponent
 	 size = @type.inject(1) do |r,x| 
 	    unless x == 0
 	       r = r * x
@@ -54,14 +93,9 @@ module Plankalkuel
 	 self.class.instances[@name.to_sym] = self
       end
 
-      def strToComp str
-	 return [str.to_i] if !(str.is_a? String)
-	 str.split(".").collect {|item| item.to_i}
-      end
-
       def component compString,type
 	 @workingBounds = 0..(@array.size-1)
-	 comp = strToComp compString
+	 comp = compString.toPKComponent
 	 begin
 	    unless (comp.empty? || !typeSafe?(type,comp.size))
 	       comp.each_with_index do |item,i|
@@ -72,15 +106,15 @@ module Plankalkuel
 	       end
 	    end
 	 rescue Exception
-	    raise ArgumentError,("The variable "+@name.to_s+" has been previously
-				 referenced with type "+@type.to_s+", however, 
-				 I now got "+(compString << type).to_s)
+	    raise ArgumentError,("The variable "+@name.to_s+" has been previously "+
+				 "referenced with type "+@type.to_s+", however, "+
+				 "I now got "+(compString << type).to_s)
 	 end
 	 self
       end
 
       def typeSafe? type,depth
-	 unless @type[depth..-1] == strToComp(type)
+	 unless @type[depth..-1] == type.toPKComponent
 	    raise ArgumentError,("Not of same type: Expected "
 				 +@type[depth..-1].to_s+", got "+type.to_s) 
 	 else
@@ -152,7 +186,9 @@ module Plankalkuel
       def dimensionTest! otherDim
 	 # only variables with the same dimension may be combined
 	 if dimension != otherDim
-	    raise ArgumentError,("Not the same dimension: I am "+dimension.to_s+ " and got "+otherDim.to_s)
+	    raise ArgumentError,("Not the same dimension: I am "+
+				 dimension.to_s+ " and got "+
+				 otherDim.to_s)
 	 end
       end
 

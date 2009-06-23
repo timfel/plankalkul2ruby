@@ -122,7 +122,8 @@ class PKVariableNode < Treetop::Runtime::SyntaxNode
 	 c.collect! { |x| x.gsub(/\(|\)/, "") }
 	 sexp << varToRuby(c)
       end
-      s(:call, s(:const, :PKTuple), :new, s(:arglist, sexp))
+      s(:call, s(:const, :PKTuple), :new, 
+	s(:arglist, s(:array, sexp)))
    end
 end
 

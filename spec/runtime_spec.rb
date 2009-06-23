@@ -1,5 +1,28 @@
 require 'spec_helper' 
 
+describe PKTuple do
+   before do
+      PKVariable.resetVariableSpace
+      @z0 = PKVariable.instance(["Z0", "", "8.0"])
+      @z1 = PKVariable.instance(["Z1", "", "8.0"])
+      @z0 <= 255
+      @z1 <= 0
+   end
+
+   it "allows access to variables as usual through the component" do
+      PKTuple.new([@z0, @z1]).component("0", "8.0").
+	 should.is_a?(PKVariable) == true
+      PKTuple.new([@z0, @z1]).component("0", "8.0").
+	 should.to_i == 255
+   end
+
+   it "passes component queries into the variables in it" do
+      PKTuple.new([@z0, @z1]).component("0.0", "0").
+	 to_i.should == 1
+   end
+
+end
+
 describe PKVariable do 
    before do 
       PKVariable.resetVariableSpace
