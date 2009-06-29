@@ -109,6 +109,7 @@ module Plankalkuel
 		  sliceStart = sliceSize*item.to_i+@workingBounds.to_a.first
 		  @workingBounds = sliceStart...(sliceStart+sliceSize)
 	       end
+               @dimension = @type[comp.size]
 	    end
 	 rescue Exception
 	    raise ArgumentError,("The variable "+@name.to_s+" has been previously "+
@@ -185,7 +186,7 @@ module Plankalkuel
       end
 
       def dimension
-	 @workingBounds.to_a.size
+         @dimension || @type[0]
       end
 
       def dimensionTest! otherDim
