@@ -104,7 +104,7 @@ grammar Pk2000
    rule count
       "N(" variable ")" {
 	 def toRuby
-	    s(:call, variable.toRuby, :dimension, s(:arglist))
+	    s(:call, variable.toRuby, :n_extent, s(:arglist))
 	 end
       }
    end

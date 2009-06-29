@@ -2375,7 +2375,7 @@ module Pk2000
 
   module Count1
 	 def toRuby
-	    s(:call, variable.toRuby, :dimension, s(:arglist))
+	    s(:call, variable.toRuby, :n_extent, s(:arglist))
 	 end
   end
 
