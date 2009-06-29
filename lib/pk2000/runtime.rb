@@ -44,9 +44,12 @@ module Plankalkuel
     def dimension
       self.size
     end
+
+    alias_method :n_extent, :dimension
   end
 
   class PKVariable
+    attr_reader :n_extent
     @@instances = [{}]
 
     def self.define array, int
@@ -101,6 +104,7 @@ module Plankalkuel
     def component compString,type
       @workingBounds = 0..(@array.size-1)
       comp = compString.toPKComponent
+      @n_extent = @type[comp.size]
       begin
         unless (comp.empty? || !typeSafe?(type,comp.size))
           comp.each_with_index do |item,i|
@@ -109,7 +113,6 @@ module Plankalkuel
             sliceStart = sliceSize*item.to_i+@workingBounds.to_a.first
             @workingBounds = sliceStart...(sliceStart+sliceSize)
           end
-          @dimension = @type[comp.size]
         end
       rescue Exception
         raise ArgumentError,("The variable "+@name.to_s+" has been previously "+
@@ -186,7 +189,7 @@ module Plankalkuel
     end
 
     def dimension
-      @dimension || @type[0]
+      @workingBounds.to_a.size
     end
 
     def dimensionTest! otherDim
