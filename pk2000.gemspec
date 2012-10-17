@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = "1.3.1"
   s.summary = s.description
-  s.add_dependency("ruby2ruby")
-  s.add_dependency("treetop")
-  s.add_dependency("polyglot")
+  s.add_dependency("ruby2ruby", "~>1.3.1")
+  s.add_dependency("treetop", "~>1.4.11")
+  s.add_dependency("polyglot", "~>0.3.3")
 end
