@@ -17,10 +17,22 @@ class Object
   end
 end
 
+class TrueClass
+  def toPKComponent
+    [1]
+  end
+end
+
+class FalseClass
+  def toPKComponent
+    [0]
+  end
+end
+
 module Plankalkuel
   class PKTuple < Array
     def initialize arr
-      arr.each do |item|
+      arr.first.each do |item|
         self << item if item.is_a? PKVariable
       end
     end
@@ -75,7 +87,11 @@ module Plankalkuel
     end
 
     def method_missing(meth, *args, &block)
-      self.to_i.send(meth, *args, &block)
+      if meth == :~
+        self.send("==", *args, &block)
+      else 
+        self.to_i.send(meth, *args, &block)
+      end
     end
 
     def self.resetVariableSpace
@@ -153,6 +169,8 @@ module Plankalkuel
           self.assignInt(term)
         elsif term.class == self.class 
           self.assignPKVariable(term)
+        else
+          self.assignInt(term.toPKComponent[0])
         end
       else
         raise ArgumentError,"I am an INPUT-VARIABLE, I should never be written to!"
