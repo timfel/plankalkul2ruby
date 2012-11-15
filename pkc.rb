@@ -5,6 +5,7 @@ require 'pk2000'
 require 'optparse'
 require 'pp'
 
+
 class OptParse
   def self.parse(args)
     options = {}
@@ -69,6 +70,11 @@ end
 def mkRb pkCode, options
   parser = Pk2000Parser.new
   tree = parser.parse(pkCode)
+  if tree.nil?
+    puts "Parsing your code failed. If run verbosely, parser.inspect is printed. Character numbers are for the tab/space stripped version."
+    puts parser.inspect if options[:verbose]
+    exit 1
+  end
   rbCode = Ruby2Ruby.new.process(tree.toRuby)
   puts rbCode if options[:verbose]
   rbCode
@@ -76,7 +82,7 @@ end
 
 def writeOut rbCode, options
   out = File.open(options[:out], 'w')
-  out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000runtime'\n\ninclude Plankalkuel\n\n"
+  out << "$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')\nrequire 'pk2000'\n\ninclude Plankalkuel\n\n"
   out << rbCode
   if options[:call]
     out << "\n"
